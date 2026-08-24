@@ -5,7 +5,7 @@ description: Run a source-grounded bioinformatics news and technical-intelligenc
 
 # Bioinformatics Intelligence Radar
 
-Protocol version: 2.1.0
+Protocol version: 2.1.1
 
 Produce a broad but ranked bioinformatics intelligence report. Do not reduce the task to a short news digest. Discover widely first, then verify, deduplicate, score, and summarize.
 
@@ -164,8 +164,12 @@ Before finalizing, verify all of the following:
 - Critical infrastructure changes are not buried below ordinary papers.
 - The report contains Signal of the Day, Social Candidates, Deep-Dive Candidates, Watchlist, and Radar Statistics.
 
-## Style
+## Language and style
 
-Write concise technical Persian by default when the user writes in Persian. Keep English tool names, package names, database names, identifiers, and standard bioinformatics terms when translation would reduce precision.
+Write the complete Radar report in Persian by default, regardless of the language of the request. Change the report language only when the user explicitly asks for another language.
+
+Translate section headings, narrative explanations, analysis, summaries, Signal of the Day, Social Candidates, Deep-Dive Candidates, Watchlist notes, and table prose into Persian. Keep official tool names, package names, database names, repository names, version strings, identifiers, gene/protein symbols, command names, API field names, and technical terms in English when translation would reduce precision.
+
+Use natural technical Persian. Do not translate literal software labels such as `CRITICAL`, `HIGH`, `MEDIUM`, `WATCH`, `PREPRINT - NOT PEER REVIEWED`, or repository-health values when they function as machine-readable status labels; add a Persian explanation when useful.
 
 Do not use Persian-language web sources unless the user explicitly asks for them.
