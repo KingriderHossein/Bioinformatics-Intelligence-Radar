@@ -4,9 +4,9 @@ A reusable ChatGPT Skill for daily bioinformatics news and technical-intelligenc
 
 ## Current protocol
 
-Version: 2.2.0
+Version: 2.2.1
 
-The radar performs broad discovery before ranking. It covers papers, preprints, software releases, databases, infrastructure, datasets, reproducibility, benchmark claims, trend signals, and public-facing social candidates. Version 2.2.0 also generates a structured Telegram Handoff v1 for downstream editorial workflows.
+The radar performs broad discovery before ranking. It covers papers, preprints, software releases, databases, infrastructure, datasets, reproducibility, benchmark claims, trend signals, and public-facing social candidates. Version 2.2.1 generates a structured Telegram Handoff v1 for orchestrated editorial workflows without requiring direct Skill-to-Skill calls. The orchestrator may load Telegram Editor instructions directly from GitHub.
 
 ## Install
 
@@ -40,3 +40,4 @@ Package the skill as `skill.zip` and import it into the ChatGPT Skills interface
 - `references/scoring.md`: technical, social, and reproducibility scoring.
 - `references/output-contract.md`: fixed Radar v2.2 report structure.
 - `references/telegram-handoff.md`: machine-readable contract for Bioinformatics Telegram Editor.
+- `references/orchestration.md`: orchestrator ownership, GitHub-direct Editor execution, and failure behavior.
