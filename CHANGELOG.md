@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.2.1 - 2026-08-24
+
+- Fixed the Skill-to-Skill orchestration bug that could report Bioinformatics Telegram Editor as unavailable.
+- Removed all direct downstream Skill/tool invocation from Radar.
+- Made the outer orchestrator the sole owner of Telegram Handoff transfer and Editor execution.
+- Added GitHub-direct Editor execution as the preferred orchestrated mode when the Editor Skill is not installed.
+- Added explicit graceful behavior so Radar never fails because a downstream Editor is absent.
+- Added `references/orchestration.md` to document runtime ownership and fallback behavior.
+
 ## 2.2.0 - 2026-08-24
 
 - Added Telegram Handoff v1 as a structured downstream contract.
