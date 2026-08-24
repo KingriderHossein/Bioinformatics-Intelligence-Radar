@@ -4,7 +4,7 @@ A reusable ChatGPT Skill for daily bioinformatics news and technical-intelligenc
 
 ## Current protocol
 
-Version: 2.1.0
+Version: 2.1.1
 
 The radar performs broad discovery before ranking. It covers papers, preprints, software releases, databases, infrastructure, datasets, reproducibility, benchmark claims, trend signals, and public-facing social candidates.
 
@@ -29,6 +29,7 @@ Package the skill as `skill.zip` and import it into the ChatGPT Skills interface
 - No invented scan counts.
 - Infrastructure changes outrank ordinary papers when they can break workflows.
 - Social headlines must be attractive without overstating evidence.
+- Radar reports are written in Persian by default, while technical names and identifiers remain in English when needed for precision.
 
 ## Layout
 
