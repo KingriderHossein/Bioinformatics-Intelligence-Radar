@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.1.1 - 2026-08-24
+
+- Made Persian the mandatory default language for the complete Radar output, regardless of prompt language.
+- Translated the report contract headings and narrative fields into Persian.
+- Kept official tool names, database names, package names, version strings, identifiers, and precision-sensitive technical terms in English.
+- Preserved machine-readable status labels while requiring Persian explanation where useful.
+
 ## 2.1.0 - 2026-08-24
 
 - Expanded the radar from a short digest to a 20-35 item target when news volume supports it.
