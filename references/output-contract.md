@@ -96,6 +96,10 @@ releaseها، تغییرات schema/API، migration، به‌روزرسانی an
 
 ## انتقال به Telegram Editor
 
-اگر اجرای Bioinformatics Telegram Editor بخشی از همان workflow است، پس از تکمیل گزارش یک `Telegram Handoff v1` مطابق `references/telegram-handoff.md` به صورت داخلی بساز و مستقیما به Editor بده. JSON خام را در گزارش کاربر نمایش نده مگر اینکه کاربر صریحا درخواست کند.
+اگر یک مرحله تحریریه Telegram بخشی از همان workflow است، پس از تکمیل گزارش یک `Telegram Handoff v1` مطابق `references/telegram-handoff.md` به صورت داخلی بساز و آن را برای orchestrator نگه دار. Radar نباید خودش Editor را به‌عنوان tool یا Skill فراخوانی یا جست‌وجو کند. JSON خام را در گزارش کاربر نمایش نده مگر اینکه کاربر صریحاً درخواست کند.
 
 Handoff فقط باید از کاندیدهای سوشال تاییدشده ساخته شود و publication status، claim status، اعداد دقیق، محدودیت ها، منبع اصلی، ریسک اغراق و `do_not_say_fa` را حفظ کند.
+
+### مرز orchestration
+
+اگر downstream Editor در runtime نصب یا discoverable نباشد، Radar نباید خطا بدهد. orchestrator باید در صورت امکان دستورهای canonical Editor را از GitHub بارگذاری و مستقیماً اعمال کند؛ و اگر آن repo نیز در دسترس نبود، از fallback editorial contract خودش استفاده کند.
