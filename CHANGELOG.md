@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.2.0 - 2026-08-24
+
+- Added Telegram Handoff v1 as a structured downstream contract.
+- Added stable candidate IDs, evidence status, exact-fact preservation, limitations, and `do_not_say_fa` guardrails.
+- Added direct handoff behavior for Bioinformatics Telegram Editor in chained or scheduled workflows.
+- Kept raw handoff JSON internal by default so the human Radar report remains readable.
+
 ## 2.1.1 - 2026-08-24
 
 - Made Persian the mandatory default language for the complete Radar output, regardless of prompt language.
