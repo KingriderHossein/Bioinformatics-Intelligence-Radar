@@ -1,93 +1,95 @@
-# Output Contract
+# قرارداد خروجی
 
-Use this order. Keep the Executive Brief compact and the Main Radar broad.
+تمام خروجی رادار را به فارسی بنویس، مگر اینکه کاربر صریحاً زبان دیگری درخواست کند. نام ابزارها، دیتابیس‌ها، packageها، repositoryها، نسخه‌ها، شناسه‌ها و اصطلاحات فنی استاندارد را در صورت نیاز به English نگه دار. تیترهای بخش‌ها و متن تحلیلی باید فارسی باشند.
 
-# Bioinformatics Intelligence Radar - [exact date]
+از ترتیب زیر استفاده کن. «خلاصه مدیریتی» باید فشرده و «رادار اصلی» باید گسترده باشد.
 
-Reporting window: [start] to [end]
+# رادار هوشمندی بیوانفورماتیک — [تاریخ دقیق]
 
-## 1. Executive Brief
-Five items maximum. For each: title, one-line significance, type, priority, source.
+بازه رصد: [شروع] تا [پایان]
 
-## 2. Critical Alerts
-Only workflow-breaking or time-sensitive changes. If none, say "No verified critical alerts in this window."
+## 1. خلاصه مدیریتی
+حداکثر پنج مورد. برای هر مورد: عنوان، اهمیت در یک خط، نوع، اولویت، منبع.
 
-For each alert include:
-- What changed
-- Effective date
-- Who is affected
-- Required action
-- Priority
+## 2. هشدارهای حیاتی
+فقط تغییرات زمان‌حساس یا مواردی که می‌توانند workflow را مختل کنند. اگر موردی وجود ندارد، بنویس: «در این بازه هشدار حیاتی تأییدشده‌ای پیدا نشد.»
 
-## 3. Main Radar
-Aim for 20-35 distinct items when the news volume supports it.
+برای هر هشدار بیاور:
+- چه چیزی تغییر کرده است
+- تاریخ اثرگذاری
+- چه کسانی تحت تأثیرند
+- اقدام لازم
+- اولویت
 
-Use a compact table:
-| # | Area | Item | Type | Priority | Why it matters |
+## 3. رادار اصلی
+وقتی حجم خبر اجازه می‌دهد، 20 تا 35 مورد متمایز را هدف بگیر.
 
-Do not repeat Executive Brief text verbatim.
+از جدول فشرده استفاده کن:
+| # | حوزه | مورد | نوع | اولویت | چرا مهم است |
 
-## 4. Tool & Software Radar
-Cover meaningful stable/pre-release changes. State release type.
+متن «خلاصه مدیریتی» را عیناً تکرار نکن.
 
-## 5. Database & Infrastructure Radar
-Cover releases, schema/API changes, migrations, annotation/reference updates, and deprecations.
+## 4. رادار ابزار و نرم‌افزار
+تغییرات معنادار stable و pre-release را پوشش بده و نوع release را مشخص کن.
 
-## 6. Dataset Radar
-For each notable dataset capture: modality, species/disease, scale, raw/processed availability, license if known, and likely use.
+## 5. رادار دیتابیس و زیرساخت
+releaseها، تغییرات schema/API، migration، به‌روزرسانی annotation/reference و deprecationها را پوشش بده.
 
-## 7. Paper Radar
-For the strongest peer-reviewed papers, provide:
-- Claim
-- Evidence/benchmark
-- Code
-- Data
-- Validation
-- Main limitation
-- Practical value
+## 6. رادار Dataset
+برای هر dataset مهم این موارد را ثبت کن: modality، species/disease، scale، دسترسی raw/processed، license در صورت معلوم بودن، و کاربرد محتمل.
 
-## 8. Preprint Watch
-Label every item `PREPRINT - NOT PEER REVIEWED` and keep claims qualified.
+## 7. رادار مقالات داوری‌شده
+برای قوی‌ترین مقالات peer-reviewed بیاور:
+- ادعا
+- شواهد/benchmark
+- کد
+- داده
+- validation
+- محدودیت اصلی
+- ارزش عملی
 
-## 9. GitHub / Repository Health
-Only for selected high-value projects. Include verified release/activity/tests/CI/container/license evidence. Do not use star count as a quality proxy by itself.
+## 8. پایش Preprint
+هر مورد را با `PREPRINT - NOT PEER REVIEWED` مشخص کن و ادعاها را با احتیاط بیان کن.
 
-## 10. Reproducibility Radar
-Show a score /10 only when enough criteria were verified; otherwise use `insufficient evidence`.
+## 9. سلامت GitHub / Repository
+فقط برای پروژه‌های مهم انتخاب‌شده. شواهد تأییدشده درباره release/activity/tests/CI/container/license را بیاور. تعداد star را به‌تنهایی شاخص کیفیت ندان.
 
-## 11. Benchmark Claims
-List large performance/accuracy claims and whether independent verification exists.
+## 10. رادار بازتولیدپذیری
+فقط وقتی معیارهای کافی تأیید شده‌اند امتیاز /10 بده؛ در غیر این صورت بنویس «شواهد ناکافی».
 
-## 12. Signal of the Day
-Provide 1-3 signals with evidence and confidence.
+## 11. ادعاهای Benchmark
+ادعاهای بزرگ سرعت/دقت/حافظه را فهرست کن و مشخص کن آیا تأیید مستقل وجود دارد یا نه.
 
-## 13. Social Candidates
-Provide 3-5 accurate public-facing candidates.
+## 12. سیگنال امروز
+1 تا 3 سیگنال با شواهد و سطح اطمینان ارائه کن.
 
-Template:
-### [Attractive but accurate headline]
-Hook: ...
-Why people may care: ...
-Suggested format: ...
-Social score: X/30
-Overhype risk: LOW/MEDIUM/HIGH - [reason]
+## 13. کاندیدهای سوشال
+3 تا 5 مورد عمومی و دقیق ارائه کن.
 
-## 14. Deep-Dive Candidates
-Exactly 3 when possible. State why and what to test next.
+قالب:
+### [عنوان جذاب اما دقیق]
+هوک: ...
+چرا برای مخاطب عمومی مهم است: ...
+فرمت پیشنهادی: ...
+امتیاز سوشال: X/30
+ریسک اغراق: LOW/MEDIUM/HIGH — [دلیل]
+
+## 14. کاندیدهای Deep-Dive
+در صورت امکان دقیقاً 3 مورد. بگو چرا ارزش بررسی دارند و قدم بعدی برای آزمون چیست.
 
 ## 15. Watchlist
-Items that are interesting but immature, experimental, or awaiting peer review/release.
+موارد جالب اما ناپخته، experimental، یا منتظر peer review/release. توضیح هر مورد را فارسی بنویس.
 
-## 16. Radar Statistics
-Report observed counts only.
+## 16. آمار رادار
+فقط شمارش‌هایی را گزارش کن که واقعاً مشاهده شده‌اند.
 
-- Candidates retrieved: [N or not measurable]
+- Candidates retrieved: [N یا «از رابط جست‌وجو قابل اندازه‌گیری نیست»]
 - Items reviewed: [N]
 - Shortlisted: [N]
 - High priority: [N]
 - Social candidates: [N]
 - Deep-dive candidates: [N]
 
-## Quiet-day behavior
+## رفتار در روزهای کم‌خبر
 
-If the reporting window is quiet, do not pad the report. State that the day is quiet, include the verified items, and use the 7-day fallback for trend context while clearly marking older items.
+اگر بازه کم‌خبر بود، گزارش را با خبرهای ضعیف پر نکن. صریحاً بگو روز کم‌خبر است، موارد تأییدشده را بیاور، و برای context روندها از fallback هفت‌روزه استفاده کن؛ موارد قدیمی‌تر را واضح علامت بزن.
