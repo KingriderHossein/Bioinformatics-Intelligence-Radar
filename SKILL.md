@@ -5,7 +5,7 @@ description: Run a source-grounded bioinformatics news and technical-intelligenc
 
 # Bioinformatics Intelligence Radar
 
-Protocol version: 2.1.1
+Protocol version: 2.2.0
 
 Produce a broad but ranked bioinformatics intelligence report. Do not reduce the task to a short news digest. Discover widely first, then verify, deduplicate, score, and summarize.
 
@@ -23,7 +23,8 @@ Produce a broad but ranked bioinformatics intelligence report. Do not reduce the
 7. Score candidates using `references/scoring.md`.
 8. Verify high-priority candidates against a primary source. For benchmark claims, inspect the methods or repository when available.
 9. Build the report using `references/output-contract.md`.
-10. Before finalizing, run the quality gates below.
+10. After selecting Social Candidates, read `references/telegram-handoff.md` and construct Telegram Handoff v1 when a downstream Telegram Editor run is requested or scheduled.
+11. Before finalizing, run the quality gates below.
 
 ## Discovery requirements
 
@@ -123,6 +124,16 @@ Each candidate must include:
 
 Prefer stories with human relevance, surprising scale, medicine, AI, DNA, evolution, microbes, visual potential, or a simple question that can be answered accurately.
 
+## Telegram handoff
+
+When a downstream Bioinformatics Telegram Editor run is part of the workflow, construct `Telegram Handoff v1` using `references/telegram-handoff.md`.
+
+- Use only selected Social Candidates.
+- Preserve primary-source evidence, publication status, exact numbers, limitations, benchmark attribution, and overhype risk.
+- Add explicit `do_not_say_fa` guardrails for likely overclaims.
+- Treat the handoff as an internal transfer object by default; do not clutter the user-facing Radar report with raw JSON unless requested.
+- If the Editor runs in the same task, pass the handoff directly to it after the Radar quality gates.
+
 ## Deep-dive candidates
 
 Select exactly 3 when enough material exists. Favor:
@@ -163,6 +174,7 @@ Before finalizing, verify all of the following:
 - The Main Radar is broader than the Executive Brief.
 - Critical infrastructure changes are not buried below ordinary papers.
 - The report contains Signal of the Day, Social Candidates, Deep-Dive Candidates, Watchlist, and Radar Statistics.
+- When a Telegram downstream step is requested, Telegram Handoff v1 was built from the same verified Social Candidates and contains no stronger claims than the Radar evidence.
 
 ## Language and style
 
