@@ -1,6 +1,6 @@
 # Telegram Handoff v1
 
-Build this handoff after Social Candidates when a downstream Bioinformatics Telegram Editor run is requested, scheduled, or otherwise part of the same workflow.
+Build this handoff after Social Candidates when an outer orchestrator requests, schedules, or otherwise includes a Telegram editorial step in the same workflow.
 
 The handoff is an internal machine-readable contract. Do not expose the raw JSON in the user-facing Radar report unless the user explicitly asks for it.
 
@@ -57,4 +57,8 @@ Recommended fields:
 
 ## Downstream behavior
 
-When Bioinformatics Telegram Editor is available in the same workflow, pass this object as its primary input. The editor owns narrative and Telegram formatting; Radar owns evidence selection and verification.
+Radar never invokes, discovers, or checks availability of Bioinformatics Telegram Editor. Radar only constructs the handoff. The outer orchestrator owns the transfer and downstream execution.
+
+The orchestrator may apply Bioinformatics Telegram Editor instructions either from an installed Skill or by loading the canonical GitHub repository instructions directly. The editor owns narrative and Telegram formatting; Radar owns evidence selection and verification.
+
+If no downstream editorial step is available, Radar must still complete successfully and must not emit a missing-tool or missing-Skill error.
