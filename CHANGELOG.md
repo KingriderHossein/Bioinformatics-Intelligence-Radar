@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.3.0 - 2026-08-28
+
+- Added `references/editorial-tone-engine.md` as the adaptive editorial routing system for Radar.
+- Defined `SCIENTIFIC_INTELLIGENCE` as the stable Radar publication identity while allowing per-item operational tones.
+- Added primary tones: `TECHNICAL_ALERT`, `NEUTRAL_TECHNICAL`, `ANALYTICAL_NEWS`, `PAPER_SPOTLIGHT`, `EVIDENCE_CRITICAL`, `SCIENTIFIC_INTELLIGENCE`, `EXPLAINER`, and `CURIOSITY_BRIDGE`.
+- Added evidence/context modifiers including `PREPRINT_CAUTION`, `AUTHOR_REPORTED`, `INDEPENDENTLY_VERIFIED`, `CLINICAL_CAUTION`, `CAUSALITY_CAUTION`, `WORKFLOW_IMPACT`, `BREAKING_URGENCY`, `LOW_EVIDENCE`, and `HIGH_OVERHYPE_RISK`.
+- Changed the drafting order to `classify information -> verify evidence -> select tone -> write` so tone cannot reshape the evidence boundary.
+- Added deterministic arbitration rules for conflicts between urgency, evidence risk, trend synthesis, paper coverage, explainer needs, and routine technical updates.
+- Added section-level tone defaults across the Executive Brief, Critical Alerts, Main Radar, Tool/Database/Dataset sections, Papers, Preprints, GitHub health, Reproducibility, Benchmark Claims, Signal of the Day, Social Candidates, Deep Dives, Watchlist, and Radar Statistics.
+- Made `CURIOSITY_BRIDGE` a Social Candidate presentation layer that inherits all evidence-risk modifiers rather than overriding them.
+- Extended Telegram Handoff v1 with `radar_primary_tone`, `radar_tone_modifiers`, and `recommended_editorial_tone` so downstream narrative style can change without weakening scientific guardrails.
+- Added final tone quality gates to prevent curiosity framing, trend language, or stylistic compression from strengthening causality, clinical readiness, benchmark superiority, or certainty.
+- Updated README and the output contract for Radar protocol 2.3.0.
+
 ## 2.2.1 - 2026-08-24
 
 - Fixed the Skill-to-Skill orchestration bug that could report Bioinformatics Telegram Editor as unavailable.
