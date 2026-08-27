@@ -5,9 +5,9 @@ description: Run a source-grounded bioinformatics news and technical-intelligenc
 
 # Bioinformatics Intelligence Radar
 
-Protocol version: 2.2.1
+Protocol version: 2.3.0
 
-Produce a broad but ranked bioinformatics intelligence report. Do not reduce the task to a short news digest. Discover widely first, then verify, deduplicate, score, and summarize.
+Produce a broad but ranked bioinformatics intelligence report. Do not reduce the task to a short news digest. Discover widely first, then verify, deduplicate, score, classify, select the editorial tone, and summarize.
 
 ## Workflow
 
@@ -22,10 +22,11 @@ Produce a broad but ranked bioinformatics intelligence report. Do not reduce the
 6. Separate peer-reviewed papers, preprints, software releases, database/infrastructure changes, datasets, and policy/service changes.
 7. Score candidates using `references/scoring.md`.
 8. Verify high-priority candidates against a primary source. For benchmark claims, inspect the methods or repository when available.
-9. Build the report using `references/output-contract.md`.
-10. After selecting Social Candidates, read `references/telegram-handoff.md` and construct Telegram Handoff v1 when an orchestrated Telegram editorial step is requested or scheduled.
-11. Do not invoke, discover, or require Bioinformatics Telegram Editor from inside Radar. The outer orchestrator owns downstream execution.
-12. Before finalizing, run the quality gates below.
+9. Read `references/editorial-tone-engine.md`. Classify each high-priority narrative item by content type, evidence status, urgency, workflow impact, overhype risk, public interest, conceptual complexity, and trend support. Assign one primary editorial tone plus applicable evidence/context modifiers. Do this after evidence verification and before prose drafting.
+10. Build the report using `references/output-contract.md`. Apply the selected tone without exposing internal tone labels unless the user asks for editorial diagnostics.
+11. After selecting Social Candidates, read `references/telegram-handoff.md` and construct Telegram Handoff v1 when an orchestrated Telegram editorial step is requested or scheduled.
+12. Do not invoke, discover, or require Bioinformatics Telegram Editor from inside Radar. The outer orchestrator owns downstream execution.
+13. Before finalizing, run both the quality gates below and the final tone gate in `references/editorial-tone-engine.md`.
 
 ## Discovery requirements
 
@@ -80,11 +81,39 @@ For high-priority papers, preprints, and tools, inspect as many of these as the 
 
 Do not invent repository health, code status, sample size, benchmark design, or reproducibility details when they were not verified.
 
+## Editorial voice and adaptive tone
+
+Use `SCIENTIFIC_INTELLIGENCE` as the stable publication identity: precise, evidence-aware, context-rich, calm, useful, and skeptical of hype.
+
+Do not force one surface tone across the full report. Use `references/editorial-tone-engine.md` to select the appropriate operational tone after classifying the information and verifying the evidence.
+
+Core rule:
+
+`classify information -> verify evidence -> select tone -> write`
+
+Never use:
+
+`tone -> reshape evidence`
+
+Tone may change framing, pacing, emphasis, explanation depth, or whether a curiosity hook is appropriate. Tone must never:
+
+- strengthen the evidence,
+- hide uncertainty,
+- remove an important limitation,
+- turn association into causation,
+- turn technical performance into clinical utility,
+- present an author-reported benchmark as independently verified,
+- present a preprint as established evidence.
+
+Use one primary tone per high-priority narrative item and zero to three evidence/context modifiers. Preserve all non-negotiable modifiers when the same item is reused in the Executive Brief, Social Candidates, Deep Dive, or Telegram Handoff.
+
 ## Preprint handling
 
 Label preprints clearly as `PREPRINT - NOT PEER REVIEWED`.
 
 Do not give a preprint the same evidential status as a peer-reviewed paper. If a preprint has a later peer-reviewed version, prefer the peer-reviewed version and mention the relationship when useful.
+
+Apply `PREPRINT_CAUTION` from `references/editorial-tone-engine.md` to every preprint.
 
 ## Benchmark-claim handling
 
@@ -96,6 +125,8 @@ For each claim:
 - Identify the compared baseline and dataset when available.
 - Mark `Independent verification: YES/NO/UNKNOWN`.
 - Flag suspicious comparisons, missing baselines, small datasets, data leakage risk, or hardware mismatch.
+- Use `EVIDENCE_CRITICAL` as the default primary tone.
+- Apply `AUTHOR_REPORTED` unless independent verification was actually found.
 
 ## Signal detection
 
@@ -107,6 +138,9 @@ Each signal must contain:
 - Evidence items
 - Why it matters
 - Confidence: `LOW`, `MEDIUM`, or `HIGH`
+- What evidence would strengthen or weaken the interpretation when useful
+
+Use `SCIENTIFIC_INTELLIGENCE` tone. Separate observed facts from analyst inference.
 
 ## Social candidates
 
@@ -125,12 +159,15 @@ Each candidate must include:
 
 Prefer stories with human relevance, surprising scale, medicine, AI, DNA, evolution, microbes, visual potential, or a simple question that can be answered accurately.
 
+Use `CURIOSITY_BRIDGE` as the presentation layer for Social Candidates, but inherit all evidence-risk modifiers from the verified source item. Curiosity must never override preprint, benchmark, clinical, causality, or overhype cautions.
+
 ## Telegram handoff
 
 When an orchestrated Telegram editorial step is part of the workflow, construct `Telegram Handoff v1` using `references/telegram-handoff.md`.
 
 - Use only selected Social Candidates.
 - Preserve primary-source evidence, publication status, exact numbers, limitations, benchmark attribution, and overhype risk.
+- Preserve the Radar item's evidence-risk modifiers and provide an editorial tone recommendation without forcing the downstream Editor to copy Radar prose.
 - Add explicit `do_not_say_fa` guardrails for likely overclaims.
 - Treat the handoff as an internal transfer object by default; do not clutter the user-facing Radar report with raw JSON unless requested.
 - Never call or search for the Editor as a tool or installed Skill. Return/retain the handoff for the outer orchestrator after the Radar quality gates.
@@ -146,6 +183,8 @@ Select exactly 3 when enough material exists. Favor:
 - Findings where independent technical analysis can add value
 
 State what should be tested next.
+
+Use `SCIENTIFIC_INTELLIGENCE` by default. Add `EVIDENCE_CRITICAL` constraints through modifiers when the deep dive centers on a disputed, weakly validated, or high-risk claim.
 
 ## Radar statistics
 
@@ -176,6 +215,11 @@ Before finalizing, verify all of the following:
 - The Main Radar is broader than the Executive Brief.
 - Critical infrastructure changes are not buried below ordinary papers.
 - The report contains Signal of the Day, Social Candidates, Deep-Dive Candidates, Watchlist, and Radar Statistics.
+- Information classification and evidence verification happened before editorial tone selection.
+- Evidence-risk modifiers were preserved when items were shortened or reframed.
+- Critical alerts are direct and actionable rather than curiosity-driven.
+- Trend language is not inferred from one isolated paper.
+- Curiosity hooks do not strengthen the underlying scientific claim.
 - When an orchestrated Telegram downstream step is requested, Telegram Handoff v1 was built from the same verified Social Candidates and contains no stronger claims than the Radar evidence.
 - Radar did not attempt to invoke or detect a downstream Editor itself.
 
