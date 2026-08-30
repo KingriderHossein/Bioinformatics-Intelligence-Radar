@@ -1,23 +1,27 @@
 # قرارداد خروجی
 
-تمام خروجی رادار را به فارسی بنویس، مگر اینکه کاربر صریحاً زبان دیگری درخواست کند. نام ابزارها، دیتابیس‌ها، packageها، repositoryها، نسخه‌ها، شناسه‌ها و اصطلاحات فنی استاندارد را در صورت نیاز به English نگه دار. تیترهای بخش‌ها و متن تحلیلی باید فارسی باشند.
+تمام خروجی رادار را به فارسی بنویس، مگر اینکه کاربر صریحاً زبان دیگری درخواست کند. نام ابزارها، دیتابیس‌ها، packageها، repositoryها، نسخه‌ها، شناسه‌ها و اصطلاحات فنی استاندارد را در صورت نیاز به English نگه دار.
 
-پیش از نوشتن متن، `references/editorial-tone-engine.md` را اعمال کن. اطلاعات را ابتدا طبقه‌بندی و شواهد را تأیید کن، سپس لحن را انتخاب کن. نام لحن‌ها و modifierهای داخلی را در گزارش کاربر چاپ نکن مگر اینکه کاربر صریحاً گزارش تحریریه یا editorial diagnostics بخواهد.
+پیش از نوشتن متن، `peer-review-policy.md` و سپس `editorial-tone-engine.md` را اعمال کن.
 
-از ترتیب زیر استفاده کن. «خلاصه مدیریتی» باید فشرده و «رادار اصلی» باید گسترده باشد. هر آیتمی که در چند بخش بازاستفاده می‌شود باید همان publication status، claim status، محدودیت‌ها و evidence modifiers را حفظ کند، حتی اگر متن کوتاه‌تر یا جذاب‌تر شود.
+قاعده غیرقابل‌مذاکره: هیچ مقاله‌ای بدون peer review تأییدشده نباید در هیچ بخش قابل مشاهده رادار، Watchlist، Signal، Social Candidate، Deep Dive، Benchmark Claims یا Telegram Handoff ظاهر شود. اگر وضعیت داوری مقاله نامعلوم است، آن را حذف کن.
+
+از ترتیب زیر استفاده کن. «خلاصه مدیریتی» باید فشرده و «رادار اصلی» باید گسترده باشد.
 
 # رادار هوشمندی بیوانفورماتیک — [تاریخ دقیق]
 
 بازه رصد: [شروع] تا [پایان]
 
 ## 1. خلاصه مدیریتی
+
 حداکثر پنج مورد. برای هر مورد: عنوان، اهمیت در یک خط، نوع، اولویت، منبع.
+
+برای scholarly literature فقط مقالات peer-reviewed تأییدشده مجازند. Software/database/dataset/infrastructure events طبق منبع رسمی خود قابل گزارش‌اند.
 
 لحن پیش‌فرض داخلی: `ANALYTICAL_NEWS`، اما قوی‌ترین محدودیت شواهد هر آیتم را از نسخه کامل آن به ارث ببر.
 
-خلاصه‌سازی نباید qualifierهایی مانند «preprint»، «author-reported»، «تأیید مستقل نشده» یا محدودیت بالینی مهم را حذف کند.
-
 ## 2. هشدارهای حیاتی
+
 فقط تغییرات زمان‌حساس یا مواردی که می‌توانند workflow را مختل کنند. اگر موردی وجود ندارد، بنویس: «در این بازه هشدار حیاتی تأییدشده‌ای پیدا نشد.»
 
 لحن پیش‌فرض داخلی: `TECHNICAL_ALERT` با `WORKFLOW_IMPACT` و در صورت واقعی بودن فوریت، `BREAKING_URGENCY`.
@@ -30,22 +34,20 @@
 - اولویت
 - منبع رسمی
 
-با سؤال کنجکاوی‌برانگیز، روایت داستانی یا صفت هیجانی شروع نکن. اقدام و تاریخ را زود بیان کن.
-
 ## 3. رادار اصلی
-وقتی حجم خبر اجازه می‌دهد، 20 تا 35 مورد متمایز را هدف بگیر.
+
+وقتی حجم خبر اجازه می‌دهد، 15 تا 30 مورد متمایز و واجد شرایط را هدف بگیر. سهم مقالات باید فقط از peer-reviewed literature باشد.
 
 از جدول فشرده استفاده کن:
-| # | حوزه | مورد | نوع | اولویت | چرا مهم است |
 
-لحن پیش‌فرض داخلی: `ANALYTICAL_NEWS`. برای وضعیت‌های فنی routine از `NEUTRAL_TECHNICAL` استفاده کن. اگر یک ردیف حامل claim پرریسک است، محدودیت لازم را در همان «چرا مهم است» حفظ کن.
+| # | حوزه | مورد | نوع | اولویت | چرا مهم است |
+|---|---|---|---|---|---|
 
 متن «خلاصه مدیریتی» را عیناً تکرار نکن.
 
 ## 4. رادار ابزار و نرم‌افزار
-تغییرات معنادار stable و pre-release را پوشش بده و نوع release را مشخص کن.
 
-لحن پیش‌فرض داخلی: `NEUTRAL_TECHNICAL`. اگر release یا deprecation می‌تواند workflow را بشکند، به `TECHNICAL_ALERT` ارتقا بده.
+تغییرات معنادار stable و pre-release را پوشش بده و نوع release را مشخص کن.
 
 برای تغییرات مهم مشخص کن:
 - نسخه و نوع release
@@ -54,22 +56,25 @@
 - اثر عملی
 - منبع رسمی release/changelog
 
-## 5. رادار دیتابیس و زیرساخت
-releaseها، تغییرات schema/API، migration، به‌روزرسانی annotation/reference و deprecationها را پوشش بده.
+لحن پیش‌فرض داخلی: `NEUTRAL_TECHNICAL`. اگر release یا deprecation می‌تواند workflow را بشکند، به `TECHNICAL_ALERT` ارتقا بده.
 
-لحن پیش‌فرض داخلی: `NEUTRAL_TECHNICAL`؛ برای تغییرات breaking یا زمان‌حساس `TECHNICAL_ALERT`.
+## 5. رادار دیتابیس و زیرساخت
+
+releaseها، تغییرات schema/API، migration، به‌روزرسانی annotation/reference و deprecationها را پوشش بده.
 
 تغییر reference/annotation را صرفاً یک release معمولی معرفی نکن اگر می‌تواند نتیجه تحلیل را تغییر دهد. اثر عملی را صریح کن.
 
 ## 6. رادار Dataset
+
 برای هر dataset مهم این موارد را ثبت کن: modality، species/disease، scale، دسترسی raw/processed، license در صورت معلوم بودن، و کاربرد محتمل.
 
-لحن پیش‌فرض داخلی: `ANALYTICAL_NEWS`.
-
-اگر فهم ارزش dataset به یک مفهوم فنی وابسته است، از `EXPLAINER` کوتاه استفاده کن؛ فقط همان prerequisite لازم را توضیح بده و گزارش را به tutorial تبدیل نکن.
+Standalone official dataset releases می‌توانند بدون مقاله peer-reviewed وارد این بخش شوند، به شرط اینکه خود رویداد dataset از منبع رسمی تأیید شود. اگر فقط یک preprint dataset را توصیف می‌کند، preprint را به‌عنوان مقاله یا authority علمی وارد گزارش نکن.
 
 ## 7. رادار مقالات داوری‌شده
-برای قوی‌ترین مقالات peer-reviewed بیاور:
+
+فقط مقالاتی را وارد کن که peer review آن‌ها طبق `peer-review-policy.md` تأیید شده باشد.
+
+برای قوی‌ترین مقالات بیاور:
 - مسئله
 - ادعا
 - روش یا طراحی کلیدی
@@ -82,33 +87,39 @@ releaseها، تغییرات schema/API، migration، به‌روزرسانی an
 
 لحن پیش‌فرض داخلی: `PAPER_SPOTLIGHT`.
 
-اگر خبر حول benchmark بزرگ، clinical implication، causal claim یا ادعای AI پرریسک می‌چرخد، محدودیت‌های `EVIDENCE_CRITICAL` را اعمال کن حتی اگر ساختار اصلی Paper Spotlight حفظ شود.
+برای benchmark بزرگ، clinical implication، causal claim یا ادعای AI پرریسک، محدودیت‌های `EVIDENCE_CRITICAL` را اعمال کن.
 
-## 8. پایش Preprint
-هر مورد را با `PREPRINT - NOT PEER REVIEWED` مشخص کن و ادعاها را با احتیاط بیان کن.
+## 8. کنترل وضعیت داوری
 
-لحن پیش‌فرض داخلی: `PAPER_SPOTLIGHT` با modifier اجباری `PREPRINT_CAUTION`.
+این بخش فقط compliance را گزارش می‌کند و نباید عنوان یا claim مقاله‌های حذف‌شده را نشان دهد.
 
-برای claimهای بزرگ، `HIGH_OVERHYPE_RISK` یا `AUTHOR_REPORTED` را در صورت انطباق حفظ کن. وضعیت preprint را در متن قابل مشاهده نگه دار و آن را فقط در metadata پنهان نکن.
+بنویس:
+
+«فقط scholarly literature با peer review تأییدشده اجازه ورود به این گزارش را دارد. Preprintها و مقاله‌های دارای وضعیت داوری نامعلوم پیش از scoring حذف می‌شوند.»
+
+اگر شمارش دقیق در همان اجرا مستقیماً مشاهده شد، می‌توان اضافه کرد:
+
+`Non-peer-reviewed literature excluded: N`
+
+این عدد را تخمین نزن.
 
 ## 9. سلامت GitHub / Repository
+
 فقط برای پروژه‌های مهم انتخاب‌شده. شواهد تأییدشده درباره release/activity/tests/CI/container/license را بیاور. تعداد star را به‌تنهایی شاخص کیفیت ندان.
 
-لحن پیش‌فرض داخلی: `NEUTRAL_TECHNICAL`.
-
-اگر metadata ناقص است، نتیجه‌گیری کیفی نکن و از framing معادل `LOW_EVIDENCE` استفاده کن.
+اگر metadata ناقص است، نتیجه‌گیری کیفی نکن.
 
 ## 10. رادار بازتولیدپذیری
-فقط وقتی معیارهای کافی تأیید شده‌اند امتیاز /10 بده؛ در غیر این صورت بنویس «شواهد ناکافی».
 
-لحن پیش‌فرض داخلی: `EVIDENCE_CRITICAL`.
+فقط وقتی معیارهای کافی تأیید شده‌اند امتیاز /10 بده؛ در غیر این صورت بنویس «شواهد ناکافی».
 
 مشخص کن کدام مؤلفه‌ها واقعاً بررسی شدند: code، data، environment/container، tests/CI، version pinning، documentation، benchmark reproducibility یا موارد دیگر.
 
 ## 11. ادعاهای Benchmark
+
 ادعاهای بزرگ سرعت/دقت/حافظه را فهرست کن و مشخص کن آیا تأیید مستقل وجود دارد یا نه.
 
-لحن پیش‌فرض داخلی: `EVIDENCE_CRITICAL`.
+برای scholarly benchmark papers فقط peer-reviewed literature مجاز است.
 
 برای هر claim بیاور:
 - ادعای دقیق
@@ -121,11 +132,13 @@ releaseها، تغییرات schema/API، migration، به‌روزرسانی an
 اگر تأیید مستقل پیدا نشد، `AUTHOR_REPORTED` را حفظ کن و نتیجه را به‌صورت واقعیت مستقل بازنویسی نکن.
 
 ## 12. سیگنال امروز
+
 1 تا 3 سیگنال با شواهد و سطح اطمینان ارائه کن.
 
-لحن پیش‌فرض داخلی: `SCIENTIFIC_INTELLIGENCE`.
+هر scholarly paper که به‌عنوان evidence یک Signal استفاده می‌شود باید peer-review-verified باشد. Non-peer-reviewed literature نمی‌تواند برای ساخت trend یا Signal استفاده شود.
 
 قالب هر سیگنال:
+
 ### [بیان دقیق سیگنال]
 شواهد: [چند مشاهده مرتبط، ترجیحاً مستقل]
 برداشت تحلیلی: ...
@@ -133,14 +146,16 @@ releaseها، تغییرات schema/API، migration، به‌روزرسانی an
 سطح اطمینان: LOW/MEDIUM/HIGH
 چه چیزی را باید بعداً رصد کرد: ...
 
-یک مقاله منفرد را معمولاً trend معرفی نکن. observed facts و analyst inference را جدا نگه دار.
+یک مقاله منفرد را معمولاً trend معرفی نکن.
 
 ## 13. کاندیدهای سوشال
+
 3 تا 5 مورد عمومی و دقیق ارائه کن.
 
-لحن پیش‌فرض داخلی: `CURIOSITY_BRIDGE` به‌عنوان presentation layer. تمام evidence modifiers آیتم اصلی را به ارث ببر.
+هر scholarly Social Candidate باید peer-review-verified باشد. Preprint یا مقاله با وضعیت داوری نامعلوم را حتی با social score بالا انتخاب نکن.
 
 قالب:
+
 ### [عنوان جذاب اما دقیق]
 هوک: ...
 چرا برای مخاطب عمومی مهم است: ...
@@ -148,12 +163,13 @@ releaseها، تغییرات schema/API، migration، به‌روزرسانی an
 امتیاز سوشال: X/30
 ریسک اغراق: LOW/MEDIUM/HIGH — [دلیل]
 
-هوک می‌تواند سؤال، تضاد یا نکته غافلگیرکننده باشد، اما نباید نتیجه‌ای قوی‌تر از شواهد القا کند. برای preprint، clinical implication، AI و benchmarkهای بزرگ، uncertainty را در صورت مرکزی بودن در headline/hook نیز قابل مشاهده نگه دار.
+لحن پیش‌فرض داخلی: `CURIOSITY_BRIDGE`. تمام evidence modifiers آیتم اصلی را حفظ کن.
 
 ## 14. کاندیدهای Deep-Dive
-در صورت امکان دقیقاً 3 مورد. بگو چرا ارزش بررسی دارند و قدم بعدی برای آزمون چیست.
 
-لحن پیش‌فرض داخلی: `SCIENTIFIC_INTELLIGENCE`.
+در صورت امکان دقیقاً 3 مورد.
+
+Scholarly Deep-Diveها باید فقط از peer-reviewed literature انتخاب شوند. Software/database/infrastructure/dataset deep dives طبق منبع رسمی خود مجازند.
 
 برای هر مورد:
 - مسئله یا سیگنال
@@ -162,41 +178,46 @@ releaseها، تغییرات schema/API، migration، به‌روزرسانی an
 - قدم بعدی برای آزمون
 - نتیجه‌ای که فعلاً نباید گرفت
 
-اگر deep dive حول claim پرریسک است، محدودیت‌های `EVIDENCE_CRITICAL` را نیز اعمال کن.
-
 ## 15. Watchlist
-موارد جالب اما ناپخته، experimental، یا منتظر peer review/release. توضیح هر مورد را فارسی بنویس.
 
-لحن پیش‌فرض داخلی: `ANALYTICAL_NEWS` با framing محافظه‌کارانه معادل `LOW_EVIDENCE` در صورت نیاز.
+Watchlist می‌تواند شامل software releaseهای experimental، migrations درحال تکمیل، API changes، database transitions و رویدادهای رسمی دیگر باشد.
 
-صریح بگو چه چیزی هنوز معلوم نیست و چه event یا evidence باعث خروج آیتم از Watchlist می‌شود.
+Non-peer-reviewed scholarly papers را در Watchlist نام نبر یا خلاصه نکن. اگر مقاله‌ای هنوز peer reviewed نشده است، آن را خارج از گزارش نگه دار تا peer-reviewed publication آن تأیید شود.
+
+صریح بگو برای آیتم‌های مجاز چه چیزی هنوز معلوم نیست و چه event یا evidence باعث خروج آن از Watchlist می‌شود.
 
 ## 16. آمار رادار
+
 فقط شمارش‌هایی را گزارش کن که واقعاً مشاهده شده‌اند.
 
-لحن پیش‌فرض داخلی: `NEUTRAL_TECHNICAL`.
-
 - Candidates retrieved: [N یا «از رابط جست‌وجو قابل اندازه‌گیری نیست»]
-- Items reviewed: [N]
+- Items reviewed: [N، اگر واقعاً ثبت شد]
 - Shortlisted: [N]
 - High priority: [N]
 - Social candidates: [N]
 - Deep-dive candidates: [N]
+- Non-peer-reviewed literature excluded: [N، فقط اگر مستقیم مشاهده شد]
 
 ## رفتار در روزهای کم‌خبر
 
-اگر بازه کم‌خبر بود، گزارش را با خبرهای ضعیف پر نکن. صریحاً بگو روز کم‌خبر است، موارد تأییدشده را بیاور، و برای context روندها از fallback هفت‌روزه استفاده کن؛ موارد قدیمی‌تر را واضح علامت بزن.
+اگر بازه کم‌خبر بود، گزارش را با خبرهای ضعیف یا preprintها پر نکن. صریحاً بگو روز کم‌خبر است و برای context از fallback هفت‌روزه استفاده کن. فقط آیتم‌های واجد شرایط را وارد کن.
 
-در روز کم‌خبر لحن را مصنوعی هیجان‌انگیز نکن. کمبود سیگنال خودش یک نتیجه معتبر رادار است.
+کمبود peer-reviewed news یک نتیجه معتبر رادار است.
 
 ## انتقال به Telegram Editor
 
-اگر یک مرحله تحریریه Telegram بخشی از همان workflow است، پس از تکمیل گزارش یک `Telegram Handoff v1` مطابق `references/telegram-handoff.md` به صورت داخلی بساز و آن را برای orchestrator نگه دار. Radar نباید خودش Editor را به‌عنوان tool یا Skill فراخوانی یا جست‌وجو کند. JSON خام را در گزارش کاربر نمایش نده مگر اینکه کاربر صریحاً درخواست کند.
+اگر یک مرحله تحریریه Telegram بخشی از همان workflow است، پس از تکمیل گزارش یک `Telegram Handoff v1` مطابق `references/telegram-handoff.md` به صورت داخلی بساز.
 
-Handoff فقط باید از کاندیدهای سوشال تأییدشده ساخته شود و publication status، claim status، اعداد دقیق، محدودیت‌ها، منبع اصلی، ریسک اغراق، evidence modifiers و `do_not_say_fa` را حفظ کند.
+Handoff فقط باید از Social Candidateهای واجد شرایط ساخته شود. اگر candidate یک scholarly paper است، peer-review verification باید قبل از handoff انجام شده باشد.
 
-Radar می‌تواند برای downstream یک editorial tone پیشنهاد کند، اما Editor مالک نهایی narrative و Telegram formatting است. پیشنهاد لحن هرگز اجازه حذف evidence modifiers را نمی‌دهد.
+Radar نباید خودش Editor را به‌عنوان tool یا Skill فراخوانی یا جست‌وجو کند. JSON خام را در گزارش کاربر نمایش نده مگر اینکه کاربر صریحاً درخواست کند.
 
-### مرز orchestration
+## Final output gate
 
-اگر downstream Editor در runtime نصب یا discoverable نباشد، Radar نباید خطا بدهد. orchestrator باید در صورت امکان دستورهای canonical Editor را از GitHub بارگذاری و مستقیماً اعمال کند؛ و اگر آن repo نیز در دسترس نبود، از fallback editorial contract خودش استفاده کند.
+پیش از پاسخ نهایی تأیید کن:
+
+- هیچ preprint-only یا scholarly paper با وضعیت peer review نامعلوم در متن دیده نمی‌شود.
+- هیچ عنوان یا claim از مقاله حذف‌شده در Watchlist یا بخش کنترل وضعیت داوری افشا نشده است.
+- Social Candidates، Signals، Deep Dives، Benchmark Claims و Telegram Handoff همان peer-review gate را رعایت می‌کنند.
+- نسخه peer-reviewed بر نسخه preprint همان مطالعه ترجیح داده شده است.
+- Software/database/dataset/infrastructure events به‌اشتباه به peer-review gate مقاله‌ها محدود نشده‌اند.
