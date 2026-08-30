@@ -1,13 +1,16 @@
 # Watchlists
 
-These are priority watchlists, not mandatory daily output lists. Report only meaningful changes.
+These are priority watchlists, not mandatory daily output lists. Report only meaningful eligible changes.
 
-## Literature and preprints
+Read `peer-review-policy.md` for scholarly-literature eligibility.
+
+## Peer-reviewed literature
 
 - PubMed / NCBI
 - Europe PMC
-- bioRxiv
-- medRxiv when directly relevant to clinical bioinformatics
+- Major journal/publisher feeds when needed for early-online peer-reviewed articles
+
+Preprint services such as bioRxiv and medRxiv are not user-visible Radar sources. Use them only for identity resolution or to locate a later peer-reviewed publication.
 
 ## Core infrastructure and databases
 
@@ -87,6 +90,8 @@ These are priority watchlists, not mandatory daily output lists. Report only mea
 - ColabFold
 - OpenFold
 - protein language-model and sequence-design tool releases when technically substantive
+
+For scholarly AI/protein-design papers, require verified peer review. Software releases remain eligible through official release sources.
 
 ## Proteomics and metabolomics
 
