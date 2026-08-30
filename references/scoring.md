@@ -1,10 +1,23 @@
 # Scoring Model
 
-Use scoring to rank, not to manufacture precision. If evidence is incomplete, lower confidence.
+Use scoring to rank eligible candidates, not to manufacture precision. If evidence is incomplete, lower confidence.
+
+## Eligibility gate before scoring
+
+Apply `peer-review-policy.md` before any technical or social score is calculated.
+
+For scholarly literature:
+
+- `peer_review_verified = true` -> eligible for scoring.
+- peer review absent, pending, ambiguous, or unverified -> `EXCLUDE_NON_PEER_REVIEWED`.
+- excluded literature receives no technical score and no social score.
+- no novelty, urgency, benchmark size, citation count, public interest, or editorial importance can override exclusion.
+
+Official software releases, database updates, datasets, infrastructure changes, security notices, and service changes are not scholarly papers and remain eligible under their own source-verification rules.
 
 ## Technical priority score /30
 
-Score each dimension 0-5:
+Score each eligible candidate dimension 0-5:
 
 1. Scientific or technical importance
 2. Practical impact on bioinformatics workflows
@@ -25,7 +38,7 @@ A breaking infrastructure change may be promoted to CRITICAL even if novelty is 
 
 ## Social score /30
 
-Score each dimension 0-5:
+Score each eligible candidate dimension 0-5:
 
 1. Novelty/surprise
 2. Public interest
@@ -35,6 +48,8 @@ Score each dimension 0-5:
 6. Curiosity/emotional pull without sensationalism
 
 Use 22/30 as a normal threshold for Social Candidates. Lower the threshold only on slow news days and state that the day was quiet.
+
+A scholarly Social Candidate must already have verified peer-review status. Never score a preprint or other excluded paper for social selection.
 
 ## Reproducibility score /10
 
@@ -57,4 +72,6 @@ Use `N/A` rather than zero when a criterion is not applicable. If several criter
 
 - HIGH: primary source plus strong supporting evidence; details are consistent.
 - MEDIUM: primary source is available but some implementation or validation details are missing.
-- LOW: announcement/preprint only, incomplete evidence, or unresolved inconsistency.
+- LOW: eligible source exists but important implementation, validation, or contextual evidence is incomplete.
+
+Do not use `LOW` confidence to retain a non-peer-reviewed scholarly paper. Such papers are excluded by the eligibility gate instead.
