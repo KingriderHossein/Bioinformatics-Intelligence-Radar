@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.4.0 - 2026-08-30
+
+- Made the scholarly-literature stream strictly peer-reviewed-only.
+- Added `references/peer-review-policy.md` as a mandatory eligibility gate before scoring, tone selection, drafting, Social Candidate selection, Signals, Deep Dives, Watchlist inclusion, Benchmark Claims, and Telegram Handoff construction.
+- Excluded preprint-only records, submitted manuscripts, working papers, conference abstracts, and scholarly records with uncertain peer-review status from all user-visible Radar output.
+- Kept preprint services available only for identity resolution and preprint-to-journal publication linkage.
+- Added explicit handling for preprint-to-peer-reviewed transitions: use the journal version as the factual authority and deduplicate the preprint.
+- Clarified that a DOI alone does not prove peer review.
+- Preserved official software, database, dataset, infrastructure, security, and service-change events as eligible non-literature sources under their own verification rules.
+- Added an eligibility gate to scoring so excluded papers receive no technical or social score and cannot be restored by novelty, urgency, or public interest.
+- Replaced the user-visible `Preprint` report section with `Peer-review status control`, which reports compliance without exposing excluded paper titles or claims.
+- Prevented non-peer-reviewed literature from supporting Signal of the Day, Social Candidates, Deep-Dive Candidates, Watchlist, Benchmark Claims, or Telegram Handoff v1.
+- Updated Telegram Handoff v1 with `peer_review_verified` for scholarly candidates and made the downstream Editor unable to restore excluded literature.
+- Removed `PREPRINT_CAUTION` from active tone routing because non-peer-reviewed scholarly literature is now filtered before the tone engine.
+- Updated README and orchestration rules for protocol 2.4.0.
+
 ## 2.3.0 - 2026-08-28
 
 - Added `references/editorial-tone-engine.md` as the adaptive editorial routing system for Radar.
