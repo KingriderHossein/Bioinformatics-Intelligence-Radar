@@ -1,5 +1,7 @@
 # Search Playbook
 
+Read `peer-review-policy.md` before literature triage.
+
 ## Daily window
 
 Primary window: previous 36 hours.
@@ -11,11 +13,15 @@ Always record the exact date range used.
 
 Run multiple passes rather than one broad query.
 
-### Pass A: literature
-Search Europe PMC/PubMed for recent bioinformatics, computational biology, genomics, transcriptomics, single-cell, spatial, long-read, metagenomics, proteomics, metabolomics, structural biology, and AI-for-biology papers.
+### Pass A: peer-reviewed literature
+Search Europe PMC/PubMed and publisher sources for recent peer-reviewed bioinformatics, computational biology, genomics, transcriptomics, single-cell, spatial, long-read, metagenomics, proteomics, metabolomics, structural biology, and AI-for-biology papers.
 
-### Pass B: preprints
-Search bioRxiv for recent computational biology, genomics, bioinformatics, methods, software, benchmark, single-cell, spatial, long-read, protein/structure, and multi-omics preprints.
+Verify journal publication or accepted/online-first status before a paper becomes a candidate.
+
+### Pass B: publication-status recovery
+Use bioRxiv, medRxiv, arXiv, or similar preprint services only when useful for identity resolution or to determine whether a record has a later peer-reviewed publication.
+
+Do not create a Radar candidate from a preprint-only record. If a peer-reviewed version exists, continue with that version and deduplicate the preprint.
 
 ### Pass C: infrastructure
 Search official NCBI and EMBL-EBI update/news/release pages. Look for migration, deprecation, API, schema, reference, annotation, archive, cloud, FTP, authentication, taxonomy, and data-release changes.
@@ -24,23 +30,35 @@ Search official NCBI and EMBL-EBI update/news/release pages. Look for migration,
 Search release pages for high-value workflow engines, core genomics tools, single-cell/spatial stacks, metagenomics tools, and major ML/structural-biology projects. Prefer release notes over generic repository pages.
 
 ### Pass E: datasets
-Search primary repositories and paper/preprint pages for new public datasets with method-development or benchmarking value. Capture modality, species, sample count, raw/processed availability, license if known, and intended use.
+Search primary repositories and verified peer-reviewed paper pages for new public datasets with method-development or benchmarking value. A standalone official dataset release remains eligible even without a paper. Capture modality, species, sample count, raw/processed availability, license if known, and intended use.
+
+Do not cite or summarize a preprint as the scientific authority for a dataset. If only a preprint describes the dataset, use the official repository record for the dataset event or omit the scholarly claim.
 
 ### Pass F: cross-check
-For the highest-ranked items, run a second query with the exact title, DOI, release tag, or database release identifier. Resolve publication status and duplicates.
+For the highest-ranked items, run a second query with the exact title, DOI, PMID, release tag, or database release identifier.
+
+For scholarly literature resolve all of:
+
+- identity,
+- journal/publisher,
+- publication status,
+- peer-review eligibility,
+- preprint-to-publication duplicates.
+
+If peer-review status remains uncertain, exclude the paper before scoring.
 
 ## Search-term families
 
 Use combinations of:
 
 - bioinformatics software release
-- computational biology method benchmark
-- genome assembly variant calling long read
-- single cell spatial transcriptomics method
-- RNA isoform long-read transcriptomics
-- metagenomics microbiome AMR computational
-- proteomics metabolomics software benchmark
-- protein structure AI biology method
+- computational biology method benchmark journal
+- genome assembly variant calling long read journal
+- single cell spatial transcriptomics method journal
+- RNA isoform long-read transcriptomics journal
+- metagenomics microbiome AMR computational journal
+- proteomics metabolomics software benchmark journal
+- protein structure AI biology method journal
 - NCBI update deprecation API release
 - EMBL-EBI database release update
 - Bioconductor release package
@@ -48,13 +66,27 @@ Use combinations of:
 
 Adapt queries to the current date and observed signals.
 
+## Eligibility before scoring
+
+For every scholarly record discovered:
+
+1. Resolve identity.
+2. Resolve publication status.
+3. Apply `peer-review-policy.md`.
+4. Exclude ineligible literature.
+5. Only then score the surviving record.
+
+Never use scientific importance, novelty, citation count, social appeal, or benchmark size to override missing peer review.
+
 ## Deduplication
 
-Treat these as one story unless the transition is itself important:
+Treat these as one story unless the transition itself is important:
 
-- bioRxiv preprint and its peer-reviewed article
-- journal early-online and final issue version
-- GitHub release plus copied project blog post
-- NCBI/EMBL-EBI announcement plus a secondary news rewrite
+- preprint and its later peer-reviewed article,
+- journal early-online and final issue version,
+- GitHub release plus copied project blog post,
+- NCBI/EMBL-EBI announcement plus a secondary news rewrite.
 
-Prefer the most authoritative and mature version.
+Prefer the most authoritative and mature eligible version.
+
+A preprint-only record is excluded rather than retained as the preferred version.
