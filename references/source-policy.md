@@ -1,19 +1,30 @@
 # Source Policy
 
+Read `peer-review-policy.md` before evaluating scholarly literature.
+
 ## Source hierarchy
 
 Use primary sources first.
 
-### Literature
-1. Journal article or PubMed/Europe PMC record linked to the article
-2. Publisher page
-3. Author repository or data repository
+### Peer-reviewed literature
+1. Publisher article page or journal version of record
+2. PubMed/Europe PMC journal record linked to the article
+3. Author repository or data repository for code/data support
 4. Institutional press release only for context
 
-### Preprints
-1. bioRxiv/medRxiv preprint page
-2. Linked repository or data archive
-3. Author/institution page only as supporting context
+A scholarly article is report-eligible only after peer-review status is positively verified under `peer-review-policy.md`.
+
+### Preprint services
+
+bioRxiv, medRxiv, arXiv, Research Square, and similar services are not eligible literature sources for the user-visible Radar.
+
+Use them only for:
+
+- identity resolution,
+- preprint-to-journal version linkage,
+- checking whether a later peer-reviewed publication exists.
+
+If no peer-reviewed version can be verified, exclude the scholarly item before scoring.
 
 ### Software
 1. Official GitHub/GitLab release page or project release notes
@@ -26,9 +37,20 @@ Use primary sources first.
 2. Official release notes, status page, documentation, or API docs
 3. Institutional news post when it links to the underlying service change
 
+### Datasets
+1. Official data repository or database release record
+2. Peer-reviewed article linked to the dataset when available
+3. Official project documentation
+
+A standalone dataset release does not need a peer-reviewed paper if it is verified as an official data-resource event. Do not treat an associated preprint as an eligible paper.
+
 ## Verification rules
 
 - Prefer the source closest to the event.
+- For scholarly literature, verify peer-review eligibility before scoring, tone selection, or drafting.
+- A DOI alone does not prove peer review.
+- If publication status is unknown or conflicting, exclude the paper from Radar output.
+- If both a preprint and peer-reviewed journal version exist, use the journal version as the factual authority and deduplicate the preprint.
 - For current news, verify the event date separately from the page publication date.
 - For software, distinguish stable release, pre-release, edge/nightly, and development branch.
 - For database changes, identify migration/deprecation dates exactly when available.
