@@ -4,6 +4,8 @@
 
 Use one stable Radar identity with adaptive editorial tones. The canonical voice of Bioinformatics Intelligence Radar is `SCIENTIFIC_INTELLIGENCE`: precise, evidence-aware, context-rich, calm, skeptical of hype, and useful to a working bioinformatician.
 
+Apply `peer-review-policy.md` before this tone engine. Tone selection only sees scholarly papers that already passed the peer-review eligibility gate. A tone can never restore excluded literature.
+
 Do not force every item into one writing style. Classify the information first, verify the evidence, then select the tone.
 
 Tone controls framing, pacing, emphasis, and explanation depth. Tone must never strengthen a scientific claim, hide uncertainty, remove a limitation, or change publication status.
@@ -12,10 +14,10 @@ Do not expose tone labels or modifiers in the user-facing report unless the user
 
 ## Selection pipeline
 
-For every high-priority item and every narrative section, resolve this vector before writing:
+For every eligible high-priority item and every narrative section, resolve this vector before writing:
 
-1. `content_type`: paper, preprint, software release, database/infrastructure change, dataset, repository state, benchmark claim, service/policy change, trend signal, or other.
-2. `evidence_status`: peer reviewed, preprint, official release/change, author-reported benchmark, independently verified, partially verified, or uncertain.
+1. `content_type`: peer-reviewed paper, software release, database/infrastructure change, dataset, repository state, benchmark claim, service/policy change, trend signal, or other.
+2. `evidence_status`: peer reviewed, official release/change, author-reported benchmark, independently verified, partially verified, or uncertain.
 3. `urgency`: CRITICAL, HIGH, MEDIUM, WATCH.
 4. `workflow_impact`: none, low, medium, high, breaking.
 5. `overhype_risk`: LOW, MEDIUM, HIGH.
@@ -72,7 +74,7 @@ Style rules:
 
 ### `PAPER_SPOTLIGHT`
 
-Use for important individual peer-reviewed papers and preprints when the paper itself is the unit of interest.
+Use for important individual peer-reviewed papers when the paper itself is the unit of interest.
 
 Structure:
 
@@ -82,7 +84,7 @@ Style rules:
 
 - Distinguish author claim from observed result and analyst interpretation.
 - Keep methods and benchmark context attached to the claim they support.
-- For preprints, apply `PREPRINT_CAUTION` automatically.
+- Do not infer stronger evidence merely from journal prestige.
 
 ### `EVIDENCE_CRITICAL`
 
@@ -110,6 +112,7 @@ Structure:
 Style rules:
 
 - A single paper is normally not a trend.
+- Scholarly support for a signal must come only from peer-review-verified papers.
 - Separate observation from inference explicitly.
 - Use calibrated language: «نشانه»، «جهت حرکت»، «الگوی در حال شکل‌گیری» before stronger trend language when evidence is incomplete.
 - Explain what new evidence would increase or decrease confidence.
@@ -141,17 +144,11 @@ Style rules:
 - The hook may create curiosity but must not imply a stronger result than the source.
 - Do not use clickbait, fear, miracle, revolution, cure, or certainty language unless the factual record independently supports it and the wording remains proportionate.
 - Preserve uncertainty in the headline or hook when uncertainty is central to the story.
-- This tone never overrides evidence modifiers.
+- This tone never overrides evidence modifiers or peer-review eligibility.
 
 ## Evidence and context modifiers
 
 Attach zero to three modifiers after the primary tone is selected. Modifiers change wording constraints, not factual content.
-
-### `PREPRINT_CAUTION`
-
-- Apply automatically to every preprint.
-- Make non-peer-reviewed status visible.
-- Avoid established-fact phrasing for the central claim.
 
 ### `AUTHOR_REPORTED`
 
@@ -187,8 +184,8 @@ Attach zero to three modifiers after the primary tone is selected. Modifiers cha
 
 ### `LOW_EVIDENCE`
 
-- Apply to early, incomplete, poorly validated, or uncertain signals.
-- Prefer `WATCH` framing and state what evidence is missing.
+- Apply to incomplete implementation details, uncertain external validation, weak reproducibility evidence, or unresolved technical context in otherwise eligible sources/events.
+- Do not use this modifier to retain a non-peer-reviewed scholarly paper; such literature is excluded before tone selection.
 
 ### `HIGH_OVERHYPE_RISK`
 
@@ -202,16 +199,14 @@ When several tones could apply, use this priority order:
 1. Workflow-breaking or time-sensitive infrastructure risk → `TECHNICAL_ALERT`.
 2. Claim-strength evaluation is the main task → `EVIDENCE_CRITICAL`.
 3. Multiple independent observations support a direction of travel → `SCIENTIFIC_INTELLIGENCE`.
-4. One important paper is the main unit of interest → `PAPER_SPOTLIGHT`.
+4. One important peer-reviewed paper is the main unit of interest → `PAPER_SPOTLIGHT`.
 5. A prerequisite concept is essential for understanding → `EXPLAINER`.
 6. Routine verified technical state → `NEUTRAL_TECHNICAL`.
 7. Otherwise → `ANALYTICAL_NEWS`.
 
-`CURIOSITY_BRIDGE` is a Social Candidate presentation layer. It may sit on top of the evidence-safe interpretation, but it must never replace `PREPRINT_CAUTION`, `AUTHOR_REPORTED`, `CLINICAL_CAUTION`, `CAUSALITY_CAUTION`, or `HIGH_OVERHYPE_RISK`.
+`CURIOSITY_BRIDGE` is a Social Candidate presentation layer. It may sit on top of the evidence-safe interpretation, but it must never replace `AUTHOR_REPORTED`, `CLINICAL_CAUTION`, `CAUSALITY_CAUTION`, or `HIGH_OVERHYPE_RISK`.
 
 ## Section defaults
-
-Use these as defaults. Override per item when the arbitration rules require it.
 
 | Radar section | Default primary tone | Typical modifiers |
 |---|---|---|
@@ -222,7 +217,7 @@ Use these as defaults. Override per item when the arbitration rules require it.
 | دیتابیس و زیرساخت | `TECHNICAL_ALERT` if breaking, otherwise `NEUTRAL_TECHNICAL` | `WORKFLOW_IMPACT` |
 | Dataset | `ANALYTICAL_NEWS` | `EXPLAINER` may replace primary tone when essential |
 | مقالات داوری‌شده | `PAPER_SPOTLIGHT` | `AUTHOR_REPORTED`, `CLINICAL_CAUTION`, etc. |
-| Preprint | `PAPER_SPOTLIGHT` | always `PREPRINT_CAUTION`; add risk modifiers as needed |
+| کنترل وضعیت داوری | `NEUTRAL_TECHNICAL` | none |
 | سلامت GitHub / Repository | `NEUTRAL_TECHNICAL` | `LOW_EVIDENCE` when metadata are incomplete |
 | بازتولیدپذیری | `EVIDENCE_CRITICAL` | evidence-specific |
 | Benchmark Claims | `EVIDENCE_CRITICAL` | usually `AUTHOR_REPORTED` unless independently verified |
@@ -242,17 +237,16 @@ Use these as defaults. Override per item when the arbitration rules require it.
 
 ## User tone overrides
 
-If the user explicitly requests a specific presentation tone, honor it where compatible with the report section. Evidence modifiers and factual-boundary rules are non-negotiable.
+If the user explicitly requests a specific presentation tone, honor it where compatible with the report section. Evidence modifiers, peer-review eligibility, and factual-boundary rules are non-negotiable.
 
-Examples:
-
-- A user may request a more conversational Radar summary, but a preprint must still carry `PREPRINT_CAUTION`.
-- A user may request curiosity-driven Social Candidates, but a critical API deprecation must remain a direct `TECHNICAL_ALERT` in the critical-alert section.
+A user may request curiosity-driven Social Candidates, but an excluded non-peer-reviewed scholarly paper remains excluded and a critical API deprecation must remain a direct `TECHNICAL_ALERT` when workflow impact is central.
 
 ## Final tone gate
 
 Before finalizing, verify:
 
+- Peer-review eligibility was resolved before tone selection for every scholarly paper.
+- No excluded scholarly paper reached the tone engine as a user-visible candidate.
 - Information was classified before tone selection.
 - Every high-priority narrative item has a defensible primary tone.
 - Evidence-risk modifiers were not dropped for style.
