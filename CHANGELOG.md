@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.5.0 - 2026-09-02
+
+- Refactored `SKILL.md` into a lean control plane aligned with current ChatGPT Skill progressive-disclosure patterns.
+- Removed repeated report-section schemas and detailed checks from `SKILL.md` when the authoritative rule already exists in a focused file under `references/`.
+- Added explicit progressive reference routing for discovery, eligibility, ranking, editorial treatment, output construction, and downstream orchestration.
+- Preserved the v2.4.0 peer-reviewed-only scholarly-literature gate without weakening any eligibility rule.
+- Added a compact release gate that points to the authoritative peer-review and output contracts instead of duplicating them.
+- Clarified source sufficiency: primary sources are the final factual authority for central claims and official changes when available.
+- Clarified that low-news days are valid and must not be filled with weak or ineligible material.
+- Added `default_prompt` to `agents/openai.yaml` for a complete UI metadata contract.
+- Updated README to distinguish runtime Skill files from repository documentation and development material.
+
 ## 2.4.0 - 2026-08-30
 
 - Made the scholarly-literature stream strictly peer-reviewed-only.
