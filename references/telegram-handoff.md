@@ -1,5 +1,15 @@
 # Telegram Handoff v1
 
+## Contents
+
+- Eligibility invariant
+- Top-level object
+- Candidate object
+- Tone transfer rules
+- Evidence rules
+- Quality gate before handoff
+- Downstream behavior
+
 Build this handoff after Social Candidates when an outer orchestrator requests, schedules, or otherwise includes a Telegram editorial step in the same workflow.
 
 The handoff is an internal machine-readable contract. Do not expose the raw JSON in the user-facing Radar report unless the user explicitly asks for it.
