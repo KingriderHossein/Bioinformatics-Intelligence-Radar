@@ -1,3 +1,4 @@
 interface:
   display_name: "Bioinformatics Intelligence Radar"
   short_description: "Daily bioinformatics news and technical intelligence radar"
+  default_prompt: "Run a source-grounded bioinformatics intelligence radar for the requested window, verify peer-review status for scholarly literature, and return the ranked Persian report."
