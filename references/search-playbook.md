@@ -1,6 +1,6 @@
 # Search Playbook
 
-Read `peer-review-policy.md` before literature triage.
+Read `curator-handoff.md` when a curated roster is available. Read `peer-review-policy.md` before literature triage.
 
 ## Daily window
 
@@ -12,6 +12,16 @@ Always record the exact date range used.
 ## Discovery passes
 
 Run multiple passes rather than one broad query.
+
+### Pass 0: curated monitoring roster
+
+When a valid Source Curator handoff is present, query or inspect its monitoring endpoints first.
+
+- Use `source_role` and `monitoring_method` to choose how the source is checked.
+- Preserve `target_id` internally when practical for traceability.
+- Treat the roster as the persistent monitoring seed, not as item-level proof.
+- Do not restrict discovery to only the currently registered domains when the Curator registry is still being bootstrapped.
+- Use built-in watchlists for uncovered domains and resilience.
 
 ### Pass A: peer-reviewed literature
 Search Europe PMC/PubMed and publisher sources for recent peer-reviewed bioinformatics, computational biology, genomics, transcriptomics, single-cell, spatial, long-read, metagenomics, proteomics, metabolomics, structural biology, and AI-for-biology papers.
@@ -26,8 +36,12 @@ Do not create a Radar candidate from a preprint-only record. If a peer-reviewed 
 ### Pass C: infrastructure
 Search official NCBI and EMBL-EBI update/news/release pages. Look for migration, deprecation, API, schema, reference, annotation, archive, cloud, FTP, authentication, taxonomy, and data-release changes.
 
+Prefer matching Curator-approved monitoring endpoints when they cover the target service. Use additional official pages when necessary for concrete-event verification.
+
 ### Pass D: software
 Search release pages for high-value workflow engines, core genomics tools, single-cell/spatial stacks, metagenomics tools, and major ML/structural-biology projects. Prefer release notes over generic repository pages.
+
+Prefer Curator-approved release endpoints for persistent monitoring. A useful unregistered release source may be used for the current event but should be treated as a future Curator candidate rather than silently added to persistent state.
 
 ### Pass E: datasets
 Search primary repositories and verified peer-reviewed paper pages for new public datasets with method-development or benchmarking value. A standalone official dataset release remains eligible even without a paper. Capture modality, species, sample count, raw/processed availability, license if known, and intended use.
@@ -76,7 +90,7 @@ For every scholarly record discovered:
 4. Exclude ineligible literature.
 5. Only then score the surviving record.
 
-Never use scientific importance, novelty, citation count, social appeal, or benchmark size to override missing peer review.
+Never use scientific importance, novelty, citation count, social appeal, benchmark size, or Curator source priority to override missing peer review.
 
 ## Deduplication
 
