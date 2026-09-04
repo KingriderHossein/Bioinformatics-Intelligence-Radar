@@ -1,6 +1,19 @@
 # Source Policy
 
-Read `peer-review-policy.md` before evaluating scholarly literature.
+Read `curator-handoff.md` when a Bioinformatics Source Curator roster is available. Read `peer-review-policy.md` before evaluating scholarly literature.
+
+## Curated monitoring roster
+
+For scheduled or periodic monitoring, valid rows from the Source Curator handoff are the primary persistent source roster.
+
+This changes **where Radar looks first**, not **what Radar is allowed to claim**.
+
+- Curator approval is source-level trust only.
+- Radar still applies item-level peer-review, identity, evidence, deduplication, and importance gates.
+- A source score or priority from Curator is monitoring metadata, not scientific evidence.
+- Radar may use an official source outside the roster for one-off discovery or verification when needed.
+- Radar must not silently promote that source into the persistent roster. Repeatedly useful unregistered sources should be treated as candidates for future Curator review.
+- When the roster is incomplete, use `watchlists.md` as a coverage-gap and resilience fallback.
 
 ## Source hierarchy
 
