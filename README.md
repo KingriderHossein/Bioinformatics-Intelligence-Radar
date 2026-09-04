@@ -4,11 +4,15 @@ A reusable ChatGPT Skill for daily bioinformatics news and technical-intelligenc
 
 ## Current protocol
 
-Version: 2.5.0
+Version: 2.6.0
 
 The radar performs broad discovery before ranking. It covers verified peer-reviewed scholarly literature, software releases, databases, infrastructure, datasets, reproducibility, benchmark claims, trend signals, and public-facing social candidates.
 
-Version 2.5.0 refactors `SKILL.md` into a lean control plane. Detailed output schemas, peer-review rules, scoring, tone routing, and downstream handoff contracts remain in focused files under `references/` and are loaded only when their workflow stage requires them. The scientific and peer-review policy from v2.4.0 is unchanged.
+Version 2.6.0 connects the Radar to the Bioinformatics Source Curator monitoring layer. When the Curator handoff is available, valid rows from `10_RADAR_SOURCES` are used as the primary persistent monitoring roster. The configured workbook is resolved by title (`Bioinformatics Source Curator Registry`) so no private spreadsheet ID is stored in this public repository.
+
+The Curator connection controls **where Radar monitors first**. It does not weaken Radar's scientific gates. Source-level approval never proves that an individual paper is peer-reviewed or that a software/database change is important. Radar still performs item-level eligibility, evidence verification, deduplication, ranking, and reporting.
+
+The Curator registry can be incomplete during bootstrap. Built-in watchlists therefore remain available as a coverage-gap and resilience fallback. Radar may also use a one-off official primary source to verify a concrete event, but it must not silently promote that source into persistent curated state.
 
 The scholarly-literature stream is **peer-reviewed-only**. Preprints, submitted manuscripts, working papers, conference abstracts, and papers with uncertain review status are excluded before scoring and cannot enter the Radar report, Signals, Social Candidates, Deep Dives, Watchlist, Benchmark Claims, or Telegram Handoff v1. Preprint services may be queried only for identity resolution or to find a later peer-reviewed publication.
 
@@ -16,7 +20,7 @@ This restriction applies to scholarly papers. Official software releases, databa
 
 The adaptive editorial tone engine keeps one stable publication identity (`SCIENTIFIC_INTELLIGENCE`) while selecting operational tones only after evidence verification. Evidence modifiers such as `AUTHOR_REPORTED`, `CLINICAL_CAUTION`, `CAUSALITY_CAUTION`, and `HIGH_OVERHYPE_RISK` are preserved when an item is shortened, reframed, reused in Social Candidates, or transferred through Telegram Handoff v1.
 
-The Radar can generate a structured Telegram Handoff v1 for orchestrated editorial workflows without directly invoking or discovering Telegram Editor. The outer orchestrator owns downstream execution.
+The Radar can generate a structured Telegram Handoff v1 for orchestrated editorial workflows without directly invoking or discovering Telegram Editor. The outer orchestrator owns both upstream Curator handoff transfer and downstream Editor execution.
 
 ## Install
 
@@ -26,6 +30,7 @@ Package the runtime Skill files with `SKILL.md` as the entry point and `agents/o
 
 - Run Bioinformatics Intelligence Radar for today.
 - Run the radar for the last 7 days.
+- Run today's radar using the current Source Curator registry.
 - Show only Critical Alerts and Tool & Software Radar.
 - Find Social Candidates from today's peer-reviewed bioinformatics radar.
 - Deep-dive the top benchmark claim from today's radar.
@@ -33,6 +38,9 @@ Package the runtime Skill files with `SKILL.md` as the entry point and `agents/o
 
 ## Design principles
 
+- Curator-approved A/B sources are the primary persistent monitoring roster when available.
+- Source-level approval never replaces Radar item-level verification.
+- Built-in watchlists cover gaps and failures while the curated registry grows.
 - Primary sources first.
 - Exact reporting windows and dates.
 - Scholarly literature must have positively verified peer-review status before scoring.
@@ -53,12 +61,13 @@ Package the runtime Skill files with `SKILL.md` as the entry point and `agents/o
 
 - `SKILL.md`: lean control plane, routing, core invariants, and release gate.
 - `agents/openai.yaml`: UI metadata and default prompt.
+- `references/curator-handoff.md`: upstream Source Curator schema, registry locator, ownership boundary, and fallback behavior.
 - `references/source-policy.md`: source hierarchy and verification policy.
 - `references/peer-review-policy.md`: mandatory scholarly-literature eligibility gate.
-- `references/search-playbook.md`: discovery, peer-review filtering, and deduplication process.
-- `references/watchlists.md`: priority tools and data resources.
+- `references/search-playbook.md`: Curator-first discovery, peer-review filtering, and deduplication process.
+- `references/watchlists.md`: fallback and coverage-gap tools and data resources.
 - `references/scoring.md`: eligibility-aware technical, social, and reproducibility scoring.
 - `references/editorial-tone-engine.md`: adaptive tone selection, evidence modifiers, arbitration rules, and final tone gate.
 - `references/output-contract.md`: authoritative Radar report schema and peer-review-compliance output.
 - `references/telegram-handoff.md`: machine-readable contract for downstream Telegram editing, with peer-review eligibility preserved.
-- `references/orchestration.md`: orchestrator ownership, repository-mode Editor execution, and failure behavior.
+- `references/orchestration.md`: upstream Curator transfer, downstream Editor execution, and failure behavior.
