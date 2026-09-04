@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.6.0 - 2026-09-04
+
+- Connected Bioinformatics Source Curator as the upstream persistent monitoring roster through a new `references/curator-handoff.md` contract.
+- Configured the default registry locator as workbook title `Bioinformatics Source Curator Registry`, tab `10_RADAR_SOURCES`, without hard-coding a private spreadsheet ID.
+- Made valid Curator A/B handoff rows the first monitoring pass for scheduled and periodic Radar runs.
+- Preserved strict ownership boundaries: Curator approval is source-level trust; Radar still performs item-level peer-review, evidence, deduplication, and importance checks.
+- Kept built-in watchlists as coverage-gap and resilience fallback so an incomplete Curator bootstrap cannot collapse Radar coverage.
+- Allowed one-off official primary sources for event verification without silently promoting them into persistent curated state.
+- Added a feedback rule so repeatedly useful unregistered official sources become candidates for future Curator review.
+- Updated source policy, search playbook, watchlists, orchestration, UI default prompt, and release gate for the new upstream handoff.
+- Preserved the peer-reviewed-only scholarly-literature policy from v2.4.0 and v2.5.0.
+
 ## 2.5.0 - 2026-09-02
 
 - Refactored `SKILL.md` into a lean control plane aligned with current ChatGPT Skill progressive-disclosure patterns.

@@ -1,8 +1,15 @@
 # Watchlists
 
-These are priority watchlists, not mandatory daily output lists. Report only meaningful eligible changes.
+These are fallback and coverage-gap watchlists, not the primary persistent roster when a valid Bioinformatics Source Curator handoff is available. Report only meaningful eligible changes.
 
-Read `peer-review-policy.md` for scholarly-literature eligibility.
+Read `curator-handoff.md` for curated source intake and `peer-review-policy.md` for scholarly-literature eligibility.
+
+## Routing rule
+
+- If a valid Curator handoff is present, monitor those sources first.
+- Use this file to cover domains that are not yet represented in the Curator bootstrap, to recover from an unavailable endpoint, or when the handoff is unavailable.
+- A source appearing here is not automatically Curator-approved.
+- If an unregistered source repeatedly produces useful official signals, return it as a future Curator candidate rather than silently treating it as persistent curated state.
 
 ## Peer-reviewed literature
 
