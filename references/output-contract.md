@@ -24,15 +24,17 @@
 
 تمام خروجی رادار را به فارسی بنویس، مگر اینکه کاربر صریحاً زبان دیگری درخواست کند. نام ابزارها، دیتابیس‌ها، packageها، repositoryها، نسخه‌ها، شناسه‌ها و اصطلاحات فنی استاندارد را در صورت نیاز به English نگه دار.
 
-پیش از نوشتن متن، `peer-review-policy.md` و سپس `editorial-tone-engine.md` را اعمال کن.
+پیش از نوشتن متن، `peer-review-policy.md`، `evidence-card.md` و سپس `editorial-tone-engine.md` را اعمال کن.
 
 قاعده غیرقابل‌مذاکره: هیچ مقاله‌ای بدون peer review تأییدشده نباید در هیچ بخش قابل مشاهده رادار، Watchlist، Signal، Social Candidate، Deep Dive، Benchmark Claims یا Telegram Handoff ظاهر شود. اگر وضعیت داوری مقاله نامعلوم است، آن را حذف کن.
 
-از ترتیب زیر استفاده کن. «خلاصه مدیریتی» باید فشرده و «رادار اصلی» باید گسترده باشد.
+تمام سطوح خروجی یک story باید از همان Evidence Card مشتق شوند. اگر یک fact، عدد، تاریخ، benchmark status یا limitation تغییر کرد، ابتدا Evidence Card را اصلاح کن و سپس متن را بازتولید کن.
 
 # رادار هوشمندی بیوانفورماتیک — [تاریخ دقیق]
 
 بازه رصد: [شروع] تا [پایان]
+
+اگر cross-run state در دسترس بود و diagnostics یا آمار مرتبط هستند، می‌توان state availability را نیز گزارش کرد. هرگز prior state را حدس نزن.
 
 ## 1. خلاصه مدیریتی
 
@@ -40,13 +42,11 @@
 
 برای scholarly literature فقط مقالات peer-reviewed تأییدشده مجازند. Software/database/dataset/infrastructure events طبق منبع رسمی خود قابل گزارش‌اند.
 
-لحن پیش‌فرض داخلی: `ANALYTICAL_NEWS`، اما قوی‌ترین محدودیت شواهد هر آیتم را از نسخه کامل آن به ارث ببر.
+لحن پیش‌فرض داخلی: `ANALYTICAL_NEWS`، اما قوی‌ترین محدودیت شواهد هر آیتم را از Evidence Card به ارث ببر.
 
 ## 2. هشدارهای حیاتی
 
 فقط تغییرات زمان‌حساس یا مواردی که می‌توانند workflow را مختل کنند. اگر موردی وجود ندارد، بنویس: «در این بازه هشدار حیاتی تأییدشده‌ای پیدا نشد.»
-
-لحن پیش‌فرض داخلی: `TECHNICAL_ALERT` با `WORKFLOW_IMPACT` و در صورت واقعی بودن فوریت، `BREAKING_URGENCY`.
 
 برای هر هشدار بیاور:
 - چه چیزی تغییر کرده است
@@ -56,9 +56,15 @@
 - اولویت
 - منبع رسمی
 
+لحن پیش‌فرض داخلی: `TECHNICAL_ALERT` با `WORKFLOW_IMPACT` و در صورت واقعی بودن فوریت، `BREAKING_URGENCY`.
+
 ## 3. رادار اصلی
 
-وقتی حجم خبر اجازه می‌دهد، 15 تا 30 مورد متمایز و واجد شرایط را هدف بگیر. سهم مقالات باید فقط از peer-reviewed literature باشد.
+هیچ حداقل تعداد اجباری وجود ندارد.
+
+فقط آیتم‌هایی را وارد کن که eligibility و relevance threshold را رد کرده‌اند. به‌طور پیش‌فرض بیش از 20 مورد وارد نکن مگر اینکه حجم واقعی خبر و درخواست کاربر پوشش گسترده‌تر را توجیه کند.
+
+اگر فقط 6 یا 8 مورد قوی وجود دارد، همان تعداد صحیح است. برای رسیدن به quota خبر ضعیف، تکراری یا کم‌اهمیت اضافه نکن.
 
 از جدول فشرده استفاده کن:
 
@@ -78,17 +84,19 @@
 - اثر عملی
 - منبع رسمی release/changelog
 
+اگر prior state موجود است، release تکراری بدون material change را دوباره به‌عنوان خبر جدید وارد نکن.
+
 لحن پیش‌فرض داخلی: `NEUTRAL_TECHNICAL`. اگر release یا deprecation می‌تواند workflow را بشکند، به `TECHNICAL_ALERT` ارتقا بده.
 
 ## 5. رادار دیتابیس و زیرساخت
 
-releaseها، تغییرات schema/API، migration، به‌روزرسانی annotation/reference و deprecationها را پوشش بده.
+releaseها، تغییرات schema/API، migration، authentication، به‌روزرسانی annotation/reference و deprecationها را پوشش بده.
 
-تغییر reference/annotation را صرفاً یک release معمولی معرفی نکن اگر می‌تواند نتیجه تحلیل را تغییر دهد. اثر عملی را صریح کن.
+تغییر reference/annotation را صرفاً یک release معمولی معرفی نکن اگر می‌تواند نتیجه تحلیل را تغییر دهد. event date، announcement date و effective date را در صورت تفاوت جدا نگه دار.
 
 ## 6. رادار Dataset
 
-برای هر dataset مهم این موارد را ثبت کن: modality، species/disease، scale، دسترسی raw/processed، license در صورت معلوم بودن، و کاربرد محتمل.
+برای هر dataset مهم این موارد را در صورت تأیید ثبت کن: modality، species/disease، scale، دسترسی raw/processed، license و کاربرد محتمل.
 
 Standalone official dataset releases می‌توانند بدون مقاله peer-reviewed وارد این بخش شوند، به شرط اینکه خود رویداد dataset از منبع رسمی تأیید شود. اگر فقط یک preprint dataset را توصیف می‌کند، preprint را به‌عنوان مقاله یا authority علمی وارد گزارش نکن.
 
@@ -96,13 +104,12 @@ Standalone official dataset releases می‌توانند بدون مقاله pee
 
 فقط مقالاتی را وارد کن که peer review آن‌ها طبق `peer-review-policy.md` تأیید شده باشد.
 
-برای قوی‌ترین مقالات بیاور:
+برای قوی‌ترین مقالات، فقط فیلدهای مادی را از Evidence Card باز کن:
 - مسئله
 - ادعا
 - روش یا طراحی کلیدی
 - شواهد/benchmark
-- کد
-- داده
+- code/data در صورت مرتبط بودن
 - validation
 - محدودیت اصلی
 - ارزش عملی
@@ -119,35 +126,33 @@ Standalone official dataset releases می‌توانند بدون مقاله pee
 
 «فقط scholarly literature با peer review تأییدشده اجازه ورود به این گزارش را دارد. Preprintها و مقاله‌های دارای وضعیت داوری نامعلوم پیش از scoring حذف می‌شوند.»
 
-اگر شمارش دقیق در همان اجرا مستقیماً مشاهده شد، می‌توان اضافه کرد:
-
-`Non-peer-reviewed literature excluded: N`
-
-این عدد را تخمین نزن.
+اگر شمارش `excluded_ineligible_scholarly` در telemetry همان اجرا واقعاً ثبت شده بود، می‌توان عدد آن را اضافه کرد. این عدد را تخمین یا از روی نتایج نهایی بازسازی نکن.
 
 ## 9. سلامت GitHub / Repository
 
-فقط برای پروژه‌های مهم انتخاب‌شده. شواهد تأییدشده درباره release/activity/tests/CI/container/license را بیاور. تعداد star را به‌تنهایی شاخص کیفیت ندان.
+فقط برای پروژه‌های مهم انتخاب‌شده و فقط در حد evidence مادی بررسی‌شده.
 
-اگر metadata ناقص است، نتیجه‌گیری کیفی نکن.
+شواهد ممکن: release/activity، tests، CI، container، license، environment، documentation و example data.
+
+تعداد star را به‌تنهایی شاخص کیفیت ندان. اگر metadata ناقص است، نتیجه‌گیری کیفی نکن.
 
 ## 10. رادار بازتولیدپذیری
 
-فقط وقتی معیارهای کافی تأیید شده‌اند امتیاز /10 بده؛ در غیر این صورت بنویس «شواهد ناکافی».
+از فیلدهای verified در Evidence Card استفاده کن.
 
-مشخص کن کدام مؤلفه‌ها واقعاً بررسی شدند: code، data، environment/container، tests/CI، version pinning، documentation، benchmark reproducibility یا موارد دیگر.
+فقط وقتی معیارهای کافی واقعاً بررسی شده‌اند امتیاز /10 بده؛ در غیر این صورت بنویس «شواهد ناکافی» و مواردی را که واقعاً تأیید شدند نام ببر.
+
+unknown را صفر فرض نکن.
 
 ## 11. ادعاهای Benchmark
 
-ادعاهای بزرگ سرعت/دقت/حافظه را فهرست کن و مشخص کن آیا تأیید مستقل وجود دارد یا نه.
+ادعاهای بزرگ سرعت/دقت/حافظه/برتری را فهرست کن و مشخص کن آیا تأیید مستقل وجود دارد یا نه.
 
-برای scholarly benchmark papers فقط peer-reviewed literature مجاز است.
-
-برای هر claim بیاور:
+برای هر claim در صورت موجود بودن بیاور:
 - ادعای دقیق
 - منبع claim
 - comparator/baseline
-- dataset و hardware context در صورت موجود بودن
+- dataset و hardware context
 - وضعیت تأیید مستقل: YES/NO/UNKNOWN
 - محدودیت یا red flag
 
@@ -155,26 +160,31 @@ Standalone official dataset releases می‌توانند بدون مقاله pee
 
 ## 12. سیگنال امروز
 
-1 تا 3 سیگنال با شواهد و سطح اطمینان ارائه کن.
+1 تا 3 مورد ارائه کن، اما فقط وقتی evidence graph کافی وجود دارد.
 
-هر scholarly paper که به‌عنوان evidence یک Signal استفاده می‌شود باید peer-review-verified باشد. Non-peer-reviewed literature نمی‌تواند برای ساخت trend یا Signal استفاده شود.
+طبقه‌بندی داخلی:
 
-قالب هر سیگنال:
+- `OBSERVATION`: یک event قوی یا مجموعه‌ای بسیار نزدیک که هنوز برای trend language کافی نیست.
+- `EMERGING_SIGNAL`: حداقل دو observation واجد شرایط و مستقل از پروژه‌ها/منشأهای متفاوت که یک جهت مشترک را پشتیبانی می‌کنند.
+- `ESTABLISHED_TREND`: به‌ندرت استفاده شود؛ به evidence گسترده‌تر در چند زمان/منبع مستقل نیاز دارد و معمولاً از یک اجرای روزانه به‌تنهایی حاصل نمی‌شود.
+
+هر scholarly evidence node باید peer-review-verified باشد. duplicate publicationها، preprint/journal pair یک مطالعه، یا چند خبر از یک project را به‌عنوان observation مستقل نشمار.
+
+قالب:
 
 ### [بیان دقیق سیگنال]
-شواهد: [چند مشاهده مرتبط، ترجیحاً مستقل]
+نوع: OBSERVATION / EMERGING_SIGNAL / ESTABLISHED_TREND
+شواهد: [مشاهدات مستقل]
 برداشت تحلیلی: ...
 چرا مهم است: ...
 سطح اطمینان: LOW/MEDIUM/HIGH
 چه چیزی را باید بعداً رصد کرد: ...
 
-یک مقاله منفرد را معمولاً trend معرفی نکن.
-
 ## 13. کاندیدهای سوشال
 
-3 تا 5 مورد عمومی و دقیق ارائه کن.
+به‌طور معمول 3 تا 5 مورد، ولی quota اجباری نیست. اگر تعداد storyهای واجد شرایط کمتر است، همان تعداد را ارائه کن.
 
-هر scholarly Social Candidate باید peer-review-verified باشد. Preprint یا مقاله با وضعیت داوری نامعلوم را حتی با social score بالا انتخاب نکن.
+هر scholarly Social Candidate باید peer-review-verified باشد.
 
 قالب:
 
@@ -183,15 +193,16 @@ Standalone official dataset releases می‌توانند بدون مقاله pee
 چرا برای مخاطب عمومی مهم است: ...
 فرمت پیشنهادی: ...
 امتیاز سوشال: X/30
+اولویت تحریریه: [editorial_priority_score]
 ریسک اغراق: LOW/MEDIUM/HIGH — [دلیل]
 
-لحن پیش‌فرض داخلی: `CURIOSITY_BRIDGE`. تمام evidence modifiers آیتم اصلی را حفظ کن.
+`editorial_priority_score` فقط ابزار ranking است؛ آن را با scientific evidence score یکی ندان.
+
+لحن پیش‌فرض داخلی: `CURIOSITY_BRIDGE`. تمام evidence modifiers، limitationها و `do_not_say_fa` از Evidence Card حفظ شوند.
 
 ## 14. کاندیدهای Deep-Dive
 
-در صورت امکان دقیقاً 3 مورد.
-
-Scholarly Deep-Diveها باید فقط از peer-reviewed literature انتخاب شوند. Software/database/infrastructure/dataset deep dives طبق منبع رسمی خود مجازند.
+در صورت وجود evidence کافی، تا 3 مورد. دقیقاً سه مورد اجباری نیست.
 
 برای هر مورد:
 - مسئله یا سیگنال
@@ -204,33 +215,47 @@ Scholarly Deep-Diveها باید فقط از peer-reviewed literature انتخا
 
 Watchlist می‌تواند شامل software releaseهای experimental، migrations درحال تکمیل، API changes، database transitions و رویدادهای رسمی دیگر باشد.
 
-Non-peer-reviewed scholarly papers را در Watchlist نام نبر یا خلاصه نکن. اگر مقاله‌ای هنوز peer reviewed نشده است، آن را خارج از گزارش نگه دار تا peer-reviewed publication آن تأیید شود.
+Non-peer-reviewed scholarly papers را در Watchlist نام نبر یا خلاصه نکن.
 
-صریح بگو برای آیتم‌های مجاز چه چیزی هنوز معلوم نیست و چه event یا evidence باعث خروج آن از Watchlist می‌شود.
+برای هر آیتم بگو چه چیزی هنوز معلوم نیست و چه material event یا evidence باعث update/خروج آن از Watchlist می‌شود.
+
+اگر run state موجود است، item قدیمی بدون material change را فقط برای continuity لازم نگه دار؛ آن را خبر تازه معرفی نکن.
 
 ## 16. آمار رادار
 
-فقط شمارش‌هایی را گزارش کن که واقعاً مشاهده شده‌اند.
+فقط telemetryهایی را گزارش کن که در همان اجرا واقعاً نگه‌داری شدند.
 
-- Candidates retrieved: [N یا «از رابط جست‌وجو قابل اندازه‌گیری نیست»]
-- Items reviewed: [N، اگر واقعاً ثبت شد]
-- Shortlisted: [N]
-- High priority: [N]
-- Social candidates: [N]
-- Deep-dive candidates: [N]
-- Non-peer-reviewed literature excluded: [N، فقط اگر مستقیم مشاهده شد]
+فیلدهای ترجیحی از `run-state.md`:
+
+- Discovered unique
+- Identity resolved
+- Peer review verified
+- Ineligible scholarly excluded
+- Official events verified
+- Cross-run duplicates suppressed
+- Material updates detected
+- Primary claims verified
+- Shortlisted
+- High priority
+- Social candidates
+- Deep-dive candidates
+- Telegram handoff candidates
+
+اگر یک counter در طول اجرا maintain نشده است، بنویس «اندازه‌گیری نشد» یا آن ردیف را حذف کن. بعداً از روی search interface یا final shortlist آن را حدس نزن.
 
 ## رفتار در روزهای کم‌خبر
 
-اگر بازه کم‌خبر بود، گزارش را با خبرهای ضعیف یا preprintها پر نکن. صریحاً بگو روز کم‌خبر است و برای context از fallback هفت‌روزه استفاده کن. فقط آیتم‌های واجد شرایط را وارد کن.
+اگر بازه کم‌خبر بود، گزارش را با خبرهای ضعیف، duplicate یا preprintها پر نکن. صریحاً بگو روز کم‌خبر است و فقط در صورت نیاز از fallback هفت‌روزه استفاده کن.
 
-کمبود peer-reviewed news یک نتیجه معتبر رادار است.
+کمبود خبر واجد شرایط یک نتیجه معتبر رادار است.
+
+Adaptive stop rule در `search-playbook.md` را رعایت کن تا low-news day به broad search نامحدود تبدیل نشود.
 
 ## انتقال به Telegram Editor
 
-اگر یک مرحله تحریریه Telegram بخشی از همان workflow است، پس از تکمیل گزارش یک `Telegram Handoff v1` مطابق `references/telegram-handoff.md` به صورت داخلی بساز.
+اگر یک مرحله تحریریه Telegram بخشی از همان workflow است، پس از تکمیل Radar quality gate یک `Telegram Handoff v1` مطابق `references/telegram-handoff.md` به صورت داخلی بساز.
 
-Handoff فقط باید از Social Candidateهای واجد شرایط ساخته شود. اگر candidate یک scholarly paper است، peer-review verification باید قبل از handoff انجام شده باشد.
+Handoff فقط از Social Candidateهای واجد شرایط و از همان Evidence Cardهای نهایی ساخته شود. Editor نباید مجبور شود facts را دوباره از source استخراج کند.
 
 Radar نباید خودش Editor را به‌عنوان tool یا Skill فراخوانی یا جست‌وجو کند. JSON خام را در گزارش کاربر نمایش نده مگر اینکه کاربر صریحاً درخواست کند.
 
@@ -240,6 +265,11 @@ Radar نباید خودش Editor را به‌عنوان tool یا Skill فراخ
 
 - هیچ preprint-only یا scholarly paper با وضعیت peer review نامعلوم در متن دیده نمی‌شود.
 - هیچ عنوان یا claim از مقاله حذف‌شده در Watchlist یا بخش کنترل وضعیت داوری افشا نشده است.
+- تمام اعداد، تاریخ‌ها و benchmark qualifierهای تکرارشونده با Evidence Card یکسان‌اند.
 - Social Candidates، Signals، Deep Dives، Benchmark Claims و Telegram Handoff همان peer-review gate را رعایت می‌کنند.
 - نسخه peer-reviewed بر نسخه preprint همان مطالعه ترجیح داده شده است.
 - Software/database/dataset/infrastructure events به‌اشتباه به peer-review gate مقاله‌ها محدود نشده‌اند.
+- duplicateهای cross-run فقط در صورت وجود state معتبر suppress شده‌اند.
+- material update به‌اشتباه به‌عنوان duplicate حذف نشده است.
+- هیچ minimum quota باعث ورود filler نشده است.
+- author-reported، clinical، causal و AI-capability limitations در کوتاه‌سازی از بین نرفته‌اند.
