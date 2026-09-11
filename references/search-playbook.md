@@ -1,69 +1,127 @@
 # Search Playbook
 
-Read `curator-handoff.md` when a curated roster is available. Read `peer-review-policy.md` before literature triage.
+Read `curator-handoff.md` when a curated roster is available. Read `peer-review-policy.md` before literature triage. Read `run-state.md` when prior Radar state is available.
 
 ## Daily window
 
 Primary window: previous 36 hours.
-Fallback window: previous 7 days for slow sources and delayed indexing.
+Fallback window: previous 7 days only for slow sources, delayed indexing, low-volume categories, or explicit recovery.
 
-Always record the exact date range used.
+Always record the exact date range used. Do not silently expand the fallback window to manufacture volume.
 
-## Discovery passes
+## Search principle
 
-Run multiple passes rather than one broad query.
+Use adaptive staged discovery. Spend broad-search effort on coverage and deep-verification effort only on candidates that can plausibly affect the final report.
 
-### Pass 0: curated monitoring roster
+Do not repeatedly verify low-value items to the same depth as Executive Brief, CRITICAL/HIGH, Benchmark, Social, or Deep-Dive candidates.
 
-When a valid Source Curator handoff is present, query or inspect its monitoring endpoints first.
+## Pass 0: curated monitoring roster
 
-- Use `source_role` and `monitoring_method` to choose how the source is checked.
-- Preserve `target_id` internally when practical for traceability.
+When a valid Source Curator handoff is present, inspect its monitoring endpoints first.
+
+- Use `source_role` and `monitoring_method` to choose how each source is checked.
+- Preserve `target_id` internally when practical.
 - Treat the roster as the persistent monitoring seed, not as item-level proof.
-- Do not restrict discovery to only the currently registered domains when the Curator registry is still being bootstrapped.
-- Use built-in watchlists for uncovered domains and resilience.
+- Do not restrict discovery to only registered domains while the Curator registry is incomplete.
+- Use `watchlists.md` for uncovered domains and resilience.
 
-### Pass A: peer-reviewed literature
-Search Europe PMC/PubMed and publisher sources for recent peer-reviewed bioinformatics, computational biology, genomics, transcriptomics, single-cell, spatial, long-read, metagenomics, proteomics, metabolomics, structural biology, and AI-for-biology papers.
+If a source repeatedly yields useful official events but is absent from the roster, add an internal Curator feedback record under `run-state.md`; do not self-approve it.
 
-Verify journal publication or accepted/online-first status before a paper becomes a candidate.
+## Pass 1: dated discovery
 
-### Pass B: publication-status recovery
-Use bioRxiv, medRxiv, arXiv, or similar preprint services only when useful for identity resolution or to determine whether a record has a later peer-reviewed publication.
+Search recent indexes, journals, publisher feeds, official release/update endpoints, and registered monitoring targets for items inside the primary window.
 
-Do not create a Radar candidate from a preprint-only record. If a peer-reviewed version exists, continue with that version and deduplicate the preprint.
+Cover these classes separately:
 
-### Pass C: infrastructure
-Search official NCBI and EMBL-EBI update/news/release pages. Look for migration, deprecation, API, schema, reference, annotation, archive, cloud, FTP, authentication, taxonomy, and data-release changes.
+- peer-reviewed bioinformatics/computational-biology literature;
+- software and workflow releases;
+- database/reference/infrastructure/service changes;
+- datasets and reusable resources;
+- security/integrity notices when relevant.
 
-Prefer matching Curator-approved monitoring endpoints when they cover the target service. Use additional official pages when necessary for concrete-event verification.
+Use date-aware queries and preserve event date separately from publication/page date.
 
-### Pass D: software
-Search release pages for high-value workflow engines, core genomics tools, single-cell/spatial stacks, metagenomics tools, and major ML/structural-biology projects. Prefer release notes over generic repository pages.
+## Pass 2: coverage-gap discovery
 
-Prefer Curator-approved release endpoints for persistent monitoring. A useful unregistered release source may be used for the current event but should be treated as a future Curator candidate rather than silently added to persistent state.
+Only after Pass 1, inspect uncovered high-value domains from `watchlists.md` or use targeted queries where the Curator roster lacks coverage.
 
-### Pass E: datasets
-Search primary repositories and verified peer-reviewed paper pages for new public datasets with method-development or benchmarking value. A standalone official dataset release remains eligible even without a paper. Capture modality, species, sample count, raw/processed availability, license if known, and intended use.
+Typical literature families include genomics, transcriptomics, single-cell, spatial, long-read, metagenomics, proteomics, metabolomics, structural bioinformatics, statistical genetics, systems biology, and AI-for-biology.
 
-Do not cite or summarize a preprint as the scientific authority for a dataset. If only a preprint describes the dataset, use the official repository record for the dataset event or omit the scholarly claim.
+Typical infrastructure families include NCBI/EMBL-EBI/Ensembl/reference releases, API/schema/authentication changes, workflow engines, package ecosystems, and core genomics tooling.
 
-### Pass F: cross-check
-For the highest-ranked items, run a second query with the exact title, DOI, PMID, release tag, or database release identifier.
+Do not run every fallback query mechanically when coverage is already adequate.
 
-For scholarly literature resolve all of:
+## Pass 3: identity and eligibility resolution
 
-- identity,
-- journal/publisher,
-- publication status,
-- peer-review eligibility,
-- preprint-to-publication duplicates.
+For every potentially reportable item:
 
-If peer-review status remains uncertain, exclude the paper before scoring.
+1. resolve canonical identity;
+2. resolve publication/event status;
+3. apply `peer-review-policy.md` for scholarly literature;
+4. resolve preprint-to-journal or early-online-to-final relationships;
+5. compare against within-run duplicates;
+6. compare against prior ledger when `run-state.md` state is available;
+7. suppress same-story/no-material-change items;
+8. create a preliminary Evidence Card only for eligible stories.
+
+Use bioRxiv, medRxiv, arXiv, Research Square, or similar preprint services only for identity resolution or locating a later peer-reviewed publication. A preprint-only record never becomes a Radar candidate.
+
+## Pass 4: shortlist verification
+
+For candidates that survive eligibility and relevance triage, verify at least:
+
+- primary source;
+- central claim or concrete event;
+- exact material date/version;
+- main limitation or evidence boundary;
+- practical workflow relevance.
+
+Update `references/evidence-card.md` first. Do not draft from search snippets.
+
+## Pass 5: deep verification
+
+Reserve deep verification for items likely to appear in one or more of:
+
+- Executive Brief;
+- CRITICAL/HIGH workflow events;
+- Benchmark Claims;
+- Social Candidates;
+- Deep-Dive Candidates;
+- high-risk clinical, causal, AI-capability, or translational stories.
+
+When material and available, verify comparator, dataset scale, hardware, internal/external validation, code, data, license, release/archive, environment/container, tests/CI, and independent reproduction.
+
+Do not search for metadata that is irrelevant to the claim merely to fill fields.
+
+## Adaptive stop rule
+
+Stop broad discovery when all of these are true:
+
+1. required coverage classes for the requested run have been checked;
+2. two consecutive broad/coverage passes add no new `HIGH` candidate or material workflow event;
+3. no unresolved CRITICAL infrastructure/security event remains;
+4. low-news behavior from `output-contract.md` can be satisfied without filler.
+
+Continue exact-title/identifier verification for already shortlisted items even after broad discovery stops.
+
+A quiet day is a valid outcome.
+
+## Verification tiers
+
+### Tier 1 — discovery
+Capture identity candidate, source class, date and enough context to decide whether the item deserves resolution.
+
+### Tier 2 — shortlist
+Resolve eligibility, primary claim/event, key numbers, main limitation and practical relevance.
+
+### Tier 3 — deep verification
+Inspect benchmark design, external validation, reproducibility, repository/runtime evidence and high-risk claim boundaries when material.
+
+Do not promote an item solely because more metadata was available.
 
 ## Search-term families
 
-Use combinations of:
+Use targeted combinations such as:
 
 - bioinformatics software release
 - computational biology method benchmark journal
@@ -73,34 +131,44 @@ Use combinations of:
 - metagenomics microbiome AMR computational journal
 - proteomics metabolomics software benchmark journal
 - protein structure AI biology method journal
+- systems biology metabolic model multiomics journal
 - NCBI update deprecation API release
 - EMBL-EBI database release update
 - Bioconductor release package
 - GitHub release Nextflow Snakemake nf-core samtools bcftools htslib minimap2
 
-Adapt queries to the current date and observed signals.
+Adapt queries to the current date, Curator coverage, unresolved gaps and observed signals.
 
 ## Eligibility before scoring
 
 For every scholarly record discovered:
 
-1. Resolve identity.
-2. Resolve publication status.
-3. Apply `peer-review-policy.md`.
-4. Exclude ineligible literature.
-5. Only then score the surviving record.
+1. resolve identity;
+2. resolve publication status;
+3. apply `peer-review-policy.md`;
+4. exclude ineligible literature;
+5. only then create the eligible Evidence Card and score it.
 
-Never use scientific importance, novelty, citation count, social appeal, benchmark size, or Curator source priority to override missing peer review.
+Never use scientific importance, novelty, citation count, social appeal, benchmark size or Curator source priority to override missing peer review.
 
 ## Deduplication
 
-Treat these as one story unless the transition itself is important:
+Treat these as one canonical story unless a material transition itself is newsworthy:
 
-- preprint and its later peer-reviewed article,
-- journal early-online and final issue version,
-- GitHub release plus copied project blog post,
-- NCBI/EMBL-EBI announcement plus a secondary news rewrite.
+- preprint and later peer-reviewed article;
+- journal early-online and final issue version;
+- GitHub release plus copied project blog post;
+- official NCBI/EMBL-EBI announcement plus secondary rewrite;
+- the same paper appearing in several indexes.
 
-Prefer the most authoritative and mature eligible version.
+Prefer the most authoritative mature eligible version.
+
+When prior run state exists, use `run-state.md` to distinguish:
+
+- duplicate/no change -> suppress;
+- material update -> report as update;
+- publication transition -> use peer-reviewed version;
+- release transition -> report the stable transition;
+- correction/retraction -> re-surface according to impact.
 
 A preprint-only record is excluded rather than retained as the preferred version.
