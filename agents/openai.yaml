@@ -1,4 +1,4 @@
 interface:
   display_name: "Bioinformatics Intelligence Radar"
-  short_description: "Daily bioinformatics news and technical intelligence radar"
-  default_prompt: "Run a source-grounded bioinformatics intelligence radar for the requested window. Use the Bioinformatics Source Curator handoff as the primary persistent monitoring roster when available, verify peer-review status for scholarly literature, and return the ranked Persian report."
+  short_description: "Stateful, evidence-grounded bioinformatics intelligence radar"
+  default_prompt: "Run a source-grounded bioinformatics intelligence radar for the requested window. Use the Bioinformatics Source Curator handoff first when available, reuse prior Radar state only when it is actually available, verify peer-review status for scholarly literature, build one Evidence Card per canonical eligible story, report only material current items, and return the ranked Persian report."
