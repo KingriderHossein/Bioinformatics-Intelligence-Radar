@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.7.0 - 2026-09-11
+
+- Added `references/evidence-card.md` and made one Evidence Card v1 the internal factual source of truth for each canonical eligible story.
+- Required downstream Radar surfaces to inherit exact numbers, benchmark attribution, source provenance, limitations, overhype risk, and `do_not_say_fa` from the same Evidence Card.
+- Added `references/run-state.md` for optional cross-run story state, material-change detection, observed-only telemetry, and Curator feedback records.
+- Defined explicit state conditions: `AVAILABLE`, `BOOTSTRAP`, `UNAVAILABLE`, and `NOT_CONFIGURED`; missing state never fails Radar and prior history must never be invented.
+- Added canonical story identity and event-fingerprint rules for suppressing same-story/no-change items while preserving publication transitions, stable-release transitions, workflow integrations, new validations, corrections, and retractions.
+- Refactored discovery into adaptive staged passes with Tier 1/2/3 verification depth and a stop rule after adequate coverage plus two consecutive passes without a new HIGH/material event.
+- Removed the previous Main Radar minimum-volume pressure. There is now no minimum story quota; low-news days must not be padded with filler.
+- Added evidence-risk-adjusted editorial ordering for Social Candidates: `editorial_priority_score = social_score - evidence_risk_penalty`, while preserving the original Social Score.
+- Added Signal evidence classes `OBSERVATION`, `EMERGING_SIGNAL`, and `ESTABLISHED_TREND`; emerging signals require at least two independent eligible observations from different projects/event origins.
+- Reworked Radar statistics around counters actually maintained during the current run, including discovery, eligibility, suppression, material updates, verification, shortlist, Social, Deep-Dive, and handoff counts.
+- Added Curator Feedback v1 so repeatedly useful unregistered official sources can be queued for future Curator review without Radar self-approving them.
+- Made source verification claim-level: publisher for publication status, release page for software version, repository for runtime/license evidence, data repository for accessions, and official service documentation for API/migration facts.
+- Kept Telegram Handoff at version `1.0` for downstream compatibility, but now derive candidates from final Evidence Cards rather than reconstructing facts separately.
+- Clarified state ownership: Radar defines story/state logic; the outer orchestrator or host owns optional persistence; runtime state must not be written into the public Skill repository unless explicitly configured by the user.
+- Preserved the strict peer-reviewed-only scholarly-literature gate and the existing no-Skill-to-Skill invocation boundary.
+
 ## 2.6.0 - 2026-09-04
 
 - Connected Bioinformatics Source Curator as the upstream persistent monitoring roster through a new `references/curator-handoff.md` contract.
