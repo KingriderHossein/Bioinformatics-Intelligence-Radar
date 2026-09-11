@@ -1,6 +1,6 @@
 # Scoring Model
 
-Use scoring to rank eligible candidates, not to manufacture precision. If evidence is incomplete, lower confidence.
+Use scoring to rank eligible candidates, not to manufacture precision. If evidence is incomplete, lower confidence. Read `evidence-card.md` before assigning scores.
 
 ## Eligibility gate before scoring
 
@@ -17,7 +17,7 @@ Official software releases, database updates, datasets, infrastructure changes, 
 
 ## Technical priority score /30
 
-Score each eligible candidate dimension 0-5:
+Score each eligible Evidence Card dimension 0-5:
 
 1. Scientific or technical importance
 2. Practical impact on bioinformatics workflows
@@ -34,7 +34,9 @@ Interpretation:
 - 10-14: WATCH
 - <10: usually omit
 
-A breaking infrastructure change may be promoted to CRITICAL even if novelty is low.
+A breaking infrastructure or security change may be promoted to CRITICAL even if novelty is low.
+
+Do not promote a paper merely because it has a large benchmark, fashionable AI framing, or high social appeal.
 
 ## Social score /30
 
@@ -47,9 +49,27 @@ Score each eligible candidate dimension 0-5:
 5. Scientific importance
 6. Curiosity/emotional pull without sensationalism
 
-Use 22/30 as a normal threshold for Social Candidates. Lower the threshold only on slow news days and state that the day was quiet.
+Use 22/30 as a normal threshold for Social Candidates. Lower it only on a genuinely quiet day and state that coverage was low.
 
-A scholarly Social Candidate must already have verified peer-review status. Never score a preprint or other excluded paper for social selection.
+A scholarly Social Candidate must already have verified peer-review status. Never score an excluded paper for social selection.
+
+## Evidence-risk penalty
+
+Social appeal is not the same as editorial priority. After `social_score`, apply an evidence-risk penalty derived from the Evidence Card:
+
+- `LOW` overhype risk -> 0
+- `MEDIUM` -> 1
+- `HIGH` -> 3
+
+Compute:
+
+`editorial_priority_score = social_score - evidence_risk_penalty`
+
+Use this score only for ordering eligible Social Candidates. Keep the original `social_score` visible in Radar output so the penalty does not masquerade as a scientific score.
+
+A HIGH-risk story may still rank first when its public value is strong, but it must retain its risk modifiers, limitations and `do_not_say_fa` boundaries.
+
+Do not add extra penalty merely because a topic is AI, clinical, causal or controversial. Penalize the verified evidence-risk state, not the topic label.
 
 ## Reproducibility score /10
 
@@ -66,12 +86,24 @@ Use one point for each verified item:
 9. Example/test data and runnable instructions
 10. Benchmark protocol sufficiently described
 
-Use `N/A` rather than zero when a criterion is not applicable. If several criteria are unknown, report `insufficient evidence` instead of a numeric score.
+Use `N/A` rather than zero when a criterion is not applicable. Use `unknown` internally when the criterion was not checked or could not be verified.
+
+Report a numeric score only when enough criteria were actually inspected to make the denominator meaningful. Otherwise report `insufficient evidence` and list the verified components.
 
 ## Confidence
 
-- HIGH: primary source plus strong supporting evidence; details are consistent.
-- MEDIUM: primary source is available but some implementation or validation details are missing.
-- LOW: eligible source exists but important implementation, validation, or contextual evidence is incomplete.
+- `HIGH`: primary source plus strong supporting evidence; material details are consistent.
+- `MEDIUM`: primary source is available but some implementation, validation, or contextual evidence is missing.
+- `LOW`: eligible source exists but important implementation, validation, or contextual evidence remains incomplete.
 
-Do not use `LOW` confidence to retain a non-peer-reviewed scholarly paper. Such papers are excluded by the eligibility gate instead.
+Do not use `LOW` confidence to retain a non-peer-reviewed scholarly paper. Such papers are excluded by the eligibility gate.
+
+## Signal evidence strength
+
+A Signal of the Day is not scored like a single item. Classify it using the evidence graph rules in `output-contract.md`:
+
+- `OBSERVATION`: one strong event or several closely related observations that are not yet enough for trend language.
+- `EMERGING_SIGNAL`: at least two independent eligible observations from different projects or event origins that support the same directional interpretation.
+- `ESTABLISHED_TREND`: use rarely; requires broader repeated evidence across time or independent sources, not just one daily run.
+
+Do not call a single paper a trend merely because it is important.
