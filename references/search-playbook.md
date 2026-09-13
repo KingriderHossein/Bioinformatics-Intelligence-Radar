@@ -1,174 +1,193 @@
 # Search Playbook
 
-Read `curator-handoff.md` when a curated roster is available. Read `peer-review-policy.md` before literature triage. Read `run-state.md` when prior Radar state is available.
+Read `curator-handoff.md` when a curated roster is available. Read `peer-review-policy.md` before literature triage. Read `run-state.md` when prior Radar state is available. Read `newsroom-engine.md` before final story selection.
 
 ## Daily window
 
 Primary window: previous 36 hours.
+
 Fallback window: previous 7 days only for slow sources, delayed indexing, low-volume categories, or explicit recovery.
 
-Always record the exact date range used. Do not silently expand the fallback window to manufacture volume.
+Always record the exact date range. Do not silently expand the window to manufacture volume.
 
 ## Search principle
 
-Use adaptive staged discovery. Spend broad-search effort on coverage and deep-verification effort only on candidates that can plausibly affect the final report.
+Discovery should be broad enough to avoid missing important events, but visible output should be narrow.
 
-Do not repeatedly verify low-value items to the same depth as Executive Brief, CRITICAL/HIGH, Benchmark, Social, or Deep-Dive candidates.
+Spend search effort in this order:
+
+`coverage -> eligibility -> identity/dedup -> Story Gate -> selective deep verification`
+
+Do not deeply audit routine eligible items that are unlikely to survive newsroom selection.
 
 ## Pass 0: curated monitoring roster
 
 When a valid Source Curator handoff is present, inspect its monitoring endpoints first.
 
-- Use `source_role` and `monitoring_method` to choose how each source is checked.
+- Route each source by `source_role` and `monitoring_method`.
 - Preserve `target_id` internally when practical.
-- Treat the roster as the persistent monitoring seed, not as item-level proof.
-- Do not restrict discovery to only registered domains while the Curator registry is incomplete.
+- Treat Curator approval as source-level trust, not item-level importance or peer-review proof.
 - Use `watchlists.md` for uncovered domains and resilience.
-
-If a source repeatedly yields useful official events but is absent from the roster, add an internal Curator feedback record under `run-state.md`; do not self-approve it.
+- If an unregistered official source repeatedly yields useful events, create Curator feedback under `run-state.md`; do not self-approve it.
 
 ## Pass 1: dated discovery
 
-Search recent indexes, journals, publisher feeds, official release/update endpoints, and registered monitoring targets for items inside the primary window.
+Search recent indexes, journal/publisher feeds, official release/update endpoints, and registered monitoring targets inside the primary window.
 
-Cover these classes separately:
+Cover separately:
 
 - peer-reviewed bioinformatics/computational-biology literature;
-- software and workflow releases;
+- software/workflow releases;
 - database/reference/infrastructure/service changes;
-- datasets and reusable resources;
-- security/integrity notices when relevant.
+- datasets/resources;
+- corrections/retractions/security/integrity notices.
 
-Use date-aware queries and preserve event date separately from publication/page date.
+Preserve event date separately from publication/page date.
 
 ## Pass 2: coverage-gap discovery
 
-Only after Pass 1, inspect uncovered high-value domains from `watchlists.md` or use targeted queries where the Curator roster lacks coverage.
+Use `watchlists.md` and targeted queries only for material coverage gaps.
 
-Typical literature families include genomics, transcriptomics, single-cell, spatial, long-read, metagenomics, proteomics, metabolomics, structural bioinformatics, statistical genetics, systems biology, and AI-for-biology.
+Typical literature domains:
 
-Typical infrastructure families include NCBI/EMBL-EBI/Ensembl/reference releases, API/schema/authentication changes, workflow engines, package ecosystems, and core genomics tooling.
+- genomics and statistical genetics;
+- transcriptomics/RNA;
+- single-cell/spatial;
+- long-read/assembly/variant calling;
+- metagenomics/microbiome/AMR;
+- proteomics/metabolomics;
+- structural bioinformatics/protein design;
+- systems biology/metabolic modelling;
+- AI/ML for biology.
+
+Typical infrastructure domains:
+
+- NCBI/EMBL-EBI/Ensembl/reference releases;
+- API/schema/authentication changes;
+- workflow engines/package ecosystems;
+- core genomics/single-cell/spatial tools.
 
 Do not run every fallback query mechanically when coverage is already adequate.
 
-## Pass 3: identity and eligibility resolution
+## Pass 3: identity and eligibility
 
-For every potentially reportable item:
+For every potentially useful item:
 
 1. resolve canonical identity;
 2. resolve publication/event status;
 3. apply `peer-review-policy.md` for scholarly literature;
-4. resolve preprint-to-journal or early-online-to-final relationships;
-5. compare against within-run duplicates;
-6. compare against prior ledger when `run-state.md` state is available;
+4. resolve preprint-to-journal and early-online/final relationships;
+5. deduplicate within run;
+6. compare against prior ledger when valid state exists;
 7. suppress same-story/no-material-change items;
-8. create a preliminary Evidence Card only for eligible stories.
+8. create a preliminary Evidence Card only for eligible items.
 
-Use bioRxiv, medRxiv, arXiv, Research Square, or similar preprint services only for identity resolution or locating a later peer-reviewed publication. A preprint-only record never becomes a Radar candidate.
+Preprint services may be used only for identity resolution or locating a later peer-reviewed publication. Preprint-only literature never becomes a newsroom candidate.
 
-## Pass 4: shortlist verification
+## Pass 4: Story Gate triage
 
-For candidates that survive eligibility and relevance triage, verify at least:
+Before deep verification, apply the internal `news_statement_fa` test from `newsroom-engine.md`.
+
+Ask:
+
+- what changed?
+- why should the BioInsight/bioinformatics reader care today?
+- is there a consequence, tension, capability, limitation, workflow impact, or unusual resource value?
+- would this still be news if the journal name were removed?
+
+If the answer is weak, keep the item out of normal newsroom coverage even if it is scientifically valid.
+
+Do not confuse recency with newsworthiness.
+
+## Pass 5: shortlist verification
+
+For items that pass the Story Gate, verify at least:
 
 - primary source;
-- central claim or concrete event;
+- central event/finding;
 - exact material date/version;
-- main limitation or evidence boundary;
-- practical workflow relevance.
+- key number(s) only when material;
+- main evidence boundary;
+- practical/scientific consequence.
 
-Update `references/evidence-card.md` first. Do not draft from search snippets.
+Update the Evidence Card before drafting.
 
-## Pass 5: deep verification
+## Pass 6: deep verification
 
-Reserve deep verification for items likely to appear in one or more of:
+Reserve Tier-3 verification for:
 
-- Executive Brief;
-- CRITICAL/HIGH workflow events;
-- Benchmark Claims;
-- Social Candidates;
-- Deep-Dive Candidates;
+- likely lead stories;
+- CRITICAL workflow events;
+- high News Value items;
+- major benchmark claims;
+- stories selected for Telegram/article/deep dive;
 - high-risk clinical, causal, AI-capability, or translational stories.
 
-When material and available, verify comparator, dataset scale, hardware, internal/external validation, code, data, license, release/archive, environment/container, tests/CI, and independent reproduction.
+When material, verify comparator, dataset scale, hardware, internal/external validation, code/data/license/release/environment/container/tests/CI, and independent replication.
 
-Do not search for metadata that is irrelevant to the claim merely to fill fields.
+Do not gather metadata merely to fill an audit template.
 
 ## Adaptive stop rule
 
-Stop broad discovery when all of these are true:
+Stop broad discovery when all are true:
 
-1. required coverage classes for the requested run have been checked;
-2. two consecutive broad/coverage passes add no new `HIGH` candidate or material workflow event;
+1. required source/domain classes have been checked;
+2. two consecutive broad/coverage passes add no new high-news-value candidate or material operational event;
 3. no unresolved CRITICAL infrastructure/security event remains;
-4. low-news behavior from `output-contract.md` can be satisfied without filler.
+4. newsroom output can honestly reflect a quiet day without filler.
 
-Continue exact-title/identifier verification for already shortlisted items even after broad discovery stops.
-
-A quiet day is a valid outcome.
+Continue exact verification for already selected stories after broad discovery stops.
 
 ## Verification tiers
 
-### Tier 1 — discovery
-Capture identity candidate, source class, date and enough context to decide whether the item deserves resolution.
+### Tier 1 — Discovery
 
-### Tier 2 — shortlist
-Resolve eligibility, primary claim/event, key numbers, main limitation and practical relevance.
+Identity candidate, date, source class, and enough context for triage.
 
-### Tier 3 — deep verification
-Inspect benchmark design, external validation, reproducibility, repository/runtime evidence and high-risk claim boundaries when material.
+### Tier 2 — Story shortlist
 
-Do not promote an item solely because more metadata was available.
+Eligibility, primary event/finding, exact material facts, main limitation, and consequence.
+
+### Tier 3 — Newsroom deep verification
+
+Benchmark scope, external validation, reproducibility/runtime evidence, and high-risk claim boundaries when material to the story.
 
 ## Search-term families
 
-Use targeted combinations such as:
+Use date-aware targeted combinations such as:
 
 - bioinformatics software release
-- computational biology method benchmark journal
+- computational biology benchmark journal
 - genome assembly variant calling long read journal
 - single cell spatial transcriptomics method journal
-- RNA isoform long-read transcriptomics journal
+- RNA splicing RBP transcriptomics journal
 - metagenomics microbiome AMR computational journal
 - proteomics metabolomics software benchmark journal
-- protein structure AI biology method journal
+- protein structure design AI biology journal
 - systems biology metabolic model multiomics journal
 - NCBI update deprecation API release
 - EMBL-EBI database release update
 - Bioconductor release package
 - GitHub release Nextflow Snakemake nf-core samtools bcftools htslib minimap2
 
-Adapt queries to the current date, Curator coverage, unresolved gaps and observed signals.
-
-## Eligibility before scoring
-
-For every scholarly record discovered:
-
-1. resolve identity;
-2. resolve publication status;
-3. apply `peer-review-policy.md`;
-4. exclude ineligible literature;
-5. only then create the eligible Evidence Card and score it.
-
-Never use scientific importance, novelty, citation count, social appeal, benchmark size or Curator source priority to override missing peer review.
+Adapt queries to current date, Curator coverage, unresolved gaps, and observed stories.
 
 ## Deduplication
 
 Treat these as one canonical story unless a material transition itself is newsworthy:
 
 - preprint and later peer-reviewed article;
-- journal early-online and final issue version;
-- GitHub release plus copied project blog post;
-- official NCBI/EMBL-EBI announcement plus secondary rewrite;
-- the same paper appearing in several indexes.
+- early-online and final issue version;
+- release plus copied project blog post;
+- official announcement plus secondary rewrite;
+- the same paper in multiple indexes.
 
-Prefer the most authoritative mature eligible version.
-
-When prior run state exists, use `run-state.md` to distinguish:
+When prior state exists:
 
 - duplicate/no change -> suppress;
-- material update -> report as update;
+- material update -> report only if the update itself passes the Story Gate;
 - publication transition -> use peer-reviewed version;
-- release transition -> report the stable transition;
-- correction/retraction -> re-surface according to impact.
+- prerelease-to-stable -> treat as release transition;
+- correction/retraction -> re-surface according to consequence.
 
-A preprint-only record is excluded rather than retained as the preferred version.
+Never infer prior-run history when state is absent.
