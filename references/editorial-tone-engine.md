@@ -1,269 +1,177 @@
 # Editorial Tone Engine
 
-## Contents
+Protocol component: Radar 3.0+
 
-- Purpose
-- Selection pipeline
-- Primary tones
-- Evidence and context modifiers
-- Arbitration rules
-- Section defaults
-- Persian style constraints
-- User tone overrides
-- Final tone gate
+Apply this file **after** scientific eligibility, Evidence Card completion, Story Gate, and angle selection.
 
-## Purpose
+The stable publication identity is:
 
-Use one stable Radar identity with adaptive editorial tones. The canonical voice of Bioinformatics Intelligence Radar is `SCIENTIFIC_INTELLIGENCE`: precise, evidence-aware, context-rich, calm, skeptical of hype, and useful to a working bioinformatician.
+`SCIENTIFIC_NEWSROOM`
 
-Apply `peer-review-policy.md` before this tone engine. Tone selection only sees scholarly papers that already passed the peer-review eligibility gate. A tone can never restore excluded literature.
+Meaning: curious, precise, accessible, consequence-aware, skeptical of hype, and fast to the point.
 
-Do not force every item into one writing style. Classify the information first, verify the evidence, then select the tone.
+Tone may change framing and pacing. It must never change claim strength, causality, clinical readiness, publication status, benchmark attribution, or uncertainty.
 
-Tone controls framing, pacing, emphasis, and explanation depth. Tone must never strengthen a scientific claim, hide uncertainty, remove a limitation, or change publication status.
+## Core writing order
 
-Do not expose tone labels or modifiers in the user-facing report unless the user explicitly asks for editorial diagnostics.
+Use:
 
-## Selection pipeline
+`verify evidence -> choose story angle -> choose tone -> write`
 
-For every eligible high-priority item and every narrative section, resolve this vector before writing:
-
-1. `content_type`: peer-reviewed paper, software release, database/infrastructure change, dataset, repository state, benchmark claim, service/policy change, trend signal, or other.
-2. `evidence_status`: peer reviewed, official release/change, author-reported benchmark, independently verified, partially verified, or uncertain.
-3. `urgency`: CRITICAL, HIGH, MEDIUM, WATCH.
-4. `workflow_impact`: none, low, medium, high, breaking.
-5. `overhype_risk`: LOW, MEDIUM, HIGH.
-6. `public_interest`: low, medium, high.
-7. `conceptual_complexity`: low, medium, high.
-8. `trend_support`: single observation, multiple related observations, or multiple independent observations.
-
-Then assign exactly one primary tone and zero to three evidence/context modifiers.
+Never use tone to rescue a weak story or an ineligible paper.
 
 ## Primary tones
 
+### `NEWS_BRIEF`
+
+Default for ordinary meaningful stories.
+
+Structure:
+
+`what happened -> why it matters -> key evidence -> visible boundary`
+
+Behavior:
+
+- lead with the event/result;
+- use short paragraphs;
+- explain only essential context;
+- keep the consequence clear;
+- avoid academic abstract language.
+
 ### `TECHNICAL_ALERT`
 
-Use for workflow-breaking or time-sensitive changes: API/schema/file-format/authentication/endpoint changes, deprecations, end-of-support, security/integrity issues, reference/annotation changes that can alter results, and urgent infrastructure failures.
+Use when timing or workflow impact is central: API/schema/authentication changes, migration/deprecation, security/integrity issues, breaking releases, reference/annotation changes, outages, deadlines.
 
 Structure:
 
-`چه چیزی تغییر کرده → چه کسی تحت تأثیر است → تاریخ اثرگذاری → اقدام لازم → منبع رسمی`
+`change -> affected users -> required action -> date/version -> official source`
 
-Style rules:
-
-- Be direct and declarative.
-- Put the actionable fact before context.
-- Do not open with a curiosity hook or rhetorical question.
-- Avoid narrative drama and promotional adjectives.
-
-### `NEUTRAL_TECHNICAL`
-
-Use for factual software/repository/database status when interpretation is limited: routine stable releases, repository health, CI/tests/container/license status, and Radar statistics.
-
-Structure:
-
-`وضعیت تأییدشده → تغییر یا ویژگی اصلی → اثر عملی در صورت معلوم بودن`
-
-Style rules:
-
-- Prefer concrete facts over interpretation.
-- Separate verified repository state from inferred project quality.
-- Do not turn star count, release frequency, or activity alone into a quality claim.
-
-### `ANALYTICAL_NEWS`
-
-Use as the default for ordinary but meaningful bioinformatics news, datasets, tools, and research developments that do not require a stronger specialized tone.
-
-Structure:
-
-`چه اتفاقی افتاد → چرا مهم است → زمینه → محدودیت یا نکته عملی`
-
-Style rules:
-
-- Lead with the event, not an abstract introduction.
-- Explain relevance without inflating novelty.
-- Prefer one useful interpretation over several speculative possibilities.
-
-### `PAPER_SPOTLIGHT`
-
-Use for important individual peer-reviewed papers when the paper itself is the unit of interest.
-
-Structure:
-
-`مسئله → روش → نتیجه اصلی → شواهد/validation → محدودیت → ارزش عملی`
-
-Style rules:
-
-- Distinguish author claim from observed result and analyst interpretation.
-- Keep methods and benchmark context attached to the claim they support.
-- Do not infer stronger evidence merely from journal prestige.
+Do not use curiosity-first framing when actionability matters more.
 
 ### `EVIDENCE_CRITICAL`
 
-Use when the main editorial task is evaluating the strength of a claim: benchmark superiority, speed/memory claims, clinical implications, causal language, surprising AI claims, weak external validation, or high overhype risk.
+Use when the main job is preventing overinterpretation of a strong or attractive claim: AI capability, clinical implication, causality, large benchmark, spectacular speed/accuracy claim, observational inference, or weak external validation.
 
 Structure:
 
-`ادعا → شواهد پشتیبان → مقایسه/validation → چه چیزی هنوز تأیید نشده → نتیجه محافظه‌کارانه`
+`claim -> actual evidence -> scope/comparator -> what is not established -> conservative meaning`
 
-Style rules:
-
-- Use wording such as «نویسندگان گزارش می‌کنند» for unreplicated benchmark claims.
-- State baseline, dataset, hardware, sample size, or validation context when available.
-- Say `UNKNOWN` rather than imply independent verification.
-- Do not convert technical performance into clinical utility.
-
-### `SCIENTIFIC_INTELLIGENCE`
-
-Use for `Signal of the Day`, cross-source synthesis, trend interpretation, and high-value Deep Dives.
-
-Structure:
-
-`سیگنال → شواهد مستقل → الگوی مشترک → چرا مهم است → سطح اطمینان → چه چیزی را بعداً باید رصد کرد`
-
-Style rules:
-
-- A single paper is normally not a trend.
-- Scholarly support for a signal must come only from peer-review-verified papers.
-- Separate observation from inference explicitly.
-- Use calibrated language: «نشانه»، «جهت حرکت»، «الگوی در حال شکل‌گیری» before stronger trend language when evidence is incomplete.
-- Explain what new evidence would increase or decrease confidence.
+Keep the caveat near the attractive claim, not buried at the end.
 
 ### `EXPLAINER`
 
-Use only when understanding the news requires a concept that many intended readers may not know, or when a dataset/method is important but its practical relevance is not obvious without one short explanation.
+Use when one unfamiliar concept is required for the reader to understand the news.
 
 Structure:
 
-`مفهوم لازم → توضیح کوتاه → ارتباط با خبر → چرا مهم است`
+`minimum prerequisite -> event/result -> why it matters -> boundary`
 
-Style rules:
+Do not turn a daily Radar story into a tutorial.
 
-- Explain only the minimum prerequisite needed to understand the news.
-- Do not turn the Radar into a tutorial.
-- Return to the concrete news item quickly.
+### `SCIENTIFIC_INTELLIGENCE`
 
-### `CURIOSITY_BRIDGE`
-
-Use for `Social Candidates` as a presentation layer for general-audience communication.
+Use for Signal of the Day and true cross-source synthesis.
 
 Structure:
 
-`سؤال/تنش دقیق → پاسخ مبتنی بر شواهد → دلیل اهمیت برای مخاطب → مرز ادعا`
+`signal -> independent observations -> shared direction -> consequence -> confidence -> what to watch`
 
-Style rules:
+A single paper is not a trend.
 
-- The hook may create curiosity but must not imply a stronger result than the source.
-- Do not use clickbait, fear, miracle, revolution, cure, or certainty language unless the factual record independently supports it and the wording remains proportionate.
-- Preserve uncertainty in the headline or hook when uncertainty is central to the story.
-- This tone never overrides evidence modifiers or peer-review eligibility.
+## Evidence modifiers
 
-## Evidence and context modifiers
-
-Attach zero to three modifiers after the primary tone is selected. Modifiers change wording constraints, not factual content.
+Attach zero to three internally. Do not normally print the labels themselves.
 
 ### `AUTHOR_REPORTED`
 
-- Apply to benchmark/performance claims not independently reproduced.
-- Attribute the result to the authors.
-- Keep comparator and benchmark context close to the claim.
+Use when benchmark/performance claims were not independently reproduced.
+
+Write «نویسندگان گزارش می‌کنند...» or equivalent when needed.
 
 ### `INDEPENDENTLY_VERIFIED`
 
-- Apply only when independent verification was actually found.
-- Name the independent evidence when useful.
-- Do not infer replication from citation, popularity, or reuse alone.
+Use only when genuinely independent verification was found.
 
 ### `CLINICAL_CAUTION`
 
-- Apply when a computational result is connected to diagnosis, prognosis, treatment, patient stratification, or another clinical use.
-- Separate research performance from clinical validation and utility.
+Separate research performance from clinical utility, diagnosis, prognosis, treatment choice, or deployment.
 
 ### `CAUSALITY_CAUTION`
 
-- Apply when observational or associational evidence could be misread as causal.
-- Use association language unless the design supports causation.
+Use association language unless the study design supports causal inference. Even causal-inference methods do not equal experimental proof.
+
+### `PREDICTION_CAUTION`
+
+Separate computational prediction/inference from direct measurement or experimental validation.
 
 ### `WORKFLOW_IMPACT`
 
-- Apply when a change can alter a running analysis pipeline, outputs, compatibility, reproducibility, or access to data/services.
-- State the practical consequence and required action when verified.
-
-### `BREAKING_URGENCY`
-
-- Apply only when timing materially changes what the reader should do.
-- Put dates, deadlines, migration windows, or immediate action near the start.
-
-### `LOW_EVIDENCE`
-
-- Apply to incomplete implementation details, uncertain external validation, weak reproducibility evidence, or unresolved technical context in otherwise eligible sources/events.
-- Do not use this modifier to retain a non-peer-reviewed scholarly paper; such literature is excluded before tone selection.
+State the concrete consequence for pipelines, compatibility, reproducibility, or access.
 
 ### `HIGH_OVERHYPE_RISK`
 
-- Apply to stories likely to be overstated because of AI, medicine, very large performance claims, surprising biological interpretation, or public-interest pressure.
-- Use the strongest available caveat early, not buried at the end.
+Use stronger restraint when a story is especially easy to oversell. Do not lower News Value solely because of this modifier; choose a deeper treatment when needed.
 
-## Arbitration rules
+### `LOW_EVIDENCE`
 
-When several tones could apply, use this priority order:
+Use only for otherwise eligible events with incomplete implementation/validation context. Never use this to retain non-peer-reviewed scholarly literature.
 
-1. Workflow-breaking or time-sensitive infrastructure risk → `TECHNICAL_ALERT`.
-2. Claim-strength evaluation is the main task → `EVIDENCE_CRITICAL`.
-3. Multiple independent observations support a direction of travel → `SCIENTIFIC_INTELLIGENCE`.
-4. One important peer-reviewed paper is the main unit of interest → `PAPER_SPOTLIGHT`.
-5. A prerequisite concept is essential for understanding → `EXPLAINER`.
-6. Routine verified technical state → `NEUTRAL_TECHNICAL`.
-7. Otherwise → `ANALYTICAL_NEWS`.
+## Headline behavior
 
-`CURIOSITY_BRIDGE` is a Social Candidate presentation layer. It may sit on top of the evidence-safe interpretation, but it must never replace `AUTHOR_REPORTED`, `CLINICAL_CAUTION`, `CAUSALITY_CAUTION`, or `HIGH_OVERHYPE_RISK`.
+Headlines should normally use one of these rhetorical shapes:
 
-## Section defaults
+- result-led;
+- consequence-led;
+- tension/trade-off;
+- precise question;
+- workflow alert;
+- scale-led when the scale itself changes the story.
 
-| Radar section | Default primary tone | Typical modifiers |
-|---|---|---|
-| خلاصه مدیریتی | `ANALYTICAL_NEWS` | inherit the item's strongest modifier |
-| هشدارهای حیاتی | `TECHNICAL_ALERT` | `WORKFLOW_IMPACT`, `BREAKING_URGENCY` |
-| رادار اصلی | `ANALYTICAL_NEWS` | item-specific |
-| ابزار و نرم‌افزار | `NEUTRAL_TECHNICAL` | `WORKFLOW_IMPACT` when relevant |
-| دیتابیس و زیرساخت | `TECHNICAL_ALERT` if breaking, otherwise `NEUTRAL_TECHNICAL` | `WORKFLOW_IMPACT` |
-| Dataset | `ANALYTICAL_NEWS` | `EXPLAINER` may replace primary tone when essential |
-| مقالات داوری‌شده | `PAPER_SPOTLIGHT` | `AUTHOR_REPORTED`, `CLINICAL_CAUTION`, etc. |
-| کنترل وضعیت داوری | `NEUTRAL_TECHNICAL` | none |
-| سلامت GitHub / Repository | `NEUTRAL_TECHNICAL` | `LOW_EVIDENCE` when metadata are incomplete |
-| بازتولیدپذیری | `EVIDENCE_CRITICAL` | evidence-specific |
-| Benchmark Claims | `EVIDENCE_CRITICAL` | usually `AUTHOR_REPORTED` unless independently verified |
-| سیگنال امروز | `SCIENTIFIC_INTELLIGENCE` | `LOW_EVIDENCE` when confidence is limited |
-| کاندیدهای سوشال | `CURIOSITY_BRIDGE` | inherit all evidence-risk modifiers |
-| Deep-Dive | `SCIENTIFIC_INTELLIGENCE` | often combine with evidence-risk modifiers |
-| Watchlist | `ANALYTICAL_NEWS` | usually `LOW_EVIDENCE` |
-| آمار رادار | `NEUTRAL_TECHNICAL` | none |
+Do not default to framework-name-led headlines.
 
-## Persian style constraints
+Do not use unsupported words equivalent to revolutionary, breakthrough, game-changing, proves, cures, guarantees, solves, understands, or replaces.
 
-- Write natural technical Persian.
-- Prefer precise verbs such as «گزارش می‌کند»، «نشان می‌دهد»، «پیشنهاد می‌کند»، «مرتبط است»، «منتشر شد»، «تغییر کرد» over promotional verbs.
-- Avoid unsupported words equivalent to revolutionary, game-changing, unprecedented, proves, cures, guarantees, or solves.
-- Do not hide the subject behind long scene-setting. Put the scientific event early.
-- Keep English identifiers, package names, gene/protein symbols, database names, API fields, versions, and other precision-sensitive labels unchanged when translation reduces clarity.
+## Persian style
+
+- Write natural modern Persian, not translated academic prose.
+- Prefer short paragraphs, usually 1-3 sentences.
+- Prefer direct verbs: «گزارش می‌کند»، «منتشر شد»، «نشان داد»، «مرتبط بود»، «اضافه شد»، «تغییر کرد».
+- Keep technical English terms when translation reduces precision.
+- Explain jargon briefly at first use only when necessary.
+- Avoid long lists of methods unless the methods are the story.
+- Use emojis only in channel-ready surfaces and sparingly.
+- Avoid repetitive labels such as «چرا مهم است؟» when the meaning can be integrated naturally into the prose.
+
+## Channel treatment
+
+### FLASH
+
+Use for simple low-risk updates that can be explained responsibly in roughly 60-120 Persian words.
+
+### STANDARD
+
+Default for most stories, roughly 100-220 words.
+
+### DEEP
+
+Use when a high-value story needs more room for benchmark scope, causal/clinical caution, AI-capability boundaries, prerequisites, or meaningful context.
+
+Length is not the goal; responsible comprehension is.
 
 ## User tone overrides
 
-If the user explicitly requests a specific presentation tone, honor it where compatible with the report section. Evidence modifiers, peer-review eligibility, and factual-boundary rules are non-negotiable.
+Honor explicit user tone requests only when they remain compatible with evidence boundaries and newsroom genre.
 
-A user may request curiosity-driven Social Candidates, but an excluded non-peer-reviewed scholarly paper remains excluded and a critical API deprecation must remain a direct `TECHNICAL_ALERT` when workflow impact is central.
+A user can ask for more conversational or more technical writing, but cannot override publication status, claim strength, uncertainty, or causality.
 
 ## Final tone gate
 
-Before finalizing, verify:
+Before releasing a story, confirm:
 
-- Peer-review eligibility was resolved before tone selection for every scholarly paper.
-- No excluded scholarly paper reached the tone engine as a user-visible candidate.
-- Information was classified before tone selection.
-- Every high-priority narrative item has a defensible primary tone.
-- Evidence-risk modifiers were not dropped for style.
-- Tone did not strengthen causality, clinical readiness, benchmark superiority, or certainty.
-- `SCIENTIFIC_INTELLIGENCE` trend language is supported by multiple observations, preferably independent ones.
-- `CURIOSITY_BRIDGE` hooks remain evidence-safe.
-- Critical alerts are direct and actionable rather than dramatic.
-- The final report still sounds like one publication: calm, precise, analytical, and scientifically skeptical.
+- the actual news appears early;
+- the angle matches the Evidence Card;
+- no journal prestige substitutes for explanation;
+- no attractive benchmark lost its scope or attribution;
+- prediction/measurement, association/causation, preclinical/clinical boundaries remain intact;
+- high-overhype stories received enough space and caution;
+- the copy sounds like one coherent scientific newsroom, not a paper abstract or marketing release.
