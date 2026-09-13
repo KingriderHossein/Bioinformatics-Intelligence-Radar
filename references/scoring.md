@@ -1,109 +1,126 @@
 # Scoring Model
 
-Use scoring to rank eligible candidates, not to manufacture precision. If evidence is incomplete, lower confidence. Read `evidence-card.md` before assigning scores.
+Radar 3.0 separates **scientific eligibility** from **newsworthiness**.
 
-## Eligibility gate before scoring
+Do not use one score to mix evidence strength, novelty, engagement, and operational urgency.
 
-Apply `peer-review-policy.md` before any technical or social score is calculated.
+## 1. Evidence eligibility gate
+
+Apply `peer-review-policy.md` and `source-policy.md` before newsroom scoring.
 
 For scholarly literature:
 
-- `peer_review_verified = true` -> eligible for scoring.
-- peer review absent, pending, ambiguous, or unverified -> `EXCLUDE_NON_PEER_REVIEWED`.
-- excluded literature receives no technical score and no social score.
-- no novelty, urgency, benchmark size, citation count, public interest, or editorial importance can override exclusion.
+- `peer_review_verified = true` -> eligible for Evidence Card and newsroom evaluation;
+- absent, ambiguous, pending, or unverified peer review -> exclude before scoring;
+- no novelty, journal prestige, benchmark size, AI framing, or public interest can restore an excluded paper.
 
-Official software releases, database updates, datasets, infrastructure changes, security notices, and service changes are not scholarly papers and remain eligible under their own source-verification rules.
+Official software releases, database updates, datasets, infrastructure changes, security notices, corrections, and service changes use their own official-source eligibility rules.
 
-## Technical priority score /30
+Evidence quality is a **gate and wording constraint**, not a News Value dimension.
 
-Score each eligible Evidence Card dimension 0-5:
+## 2. News Value Score /30
 
-1. Scientific or technical importance
-2. Practical impact on bioinformatics workflows
-3. Novelty
-4. Evidence quality
-5. Reproducibility/actionability
-6. Time sensitivity
+Read `newsroom-engine.md` before scoring.
+
+Score each eligible Evidence Card from 0-5 on:
+
+1. `impact` — does something meaningfully change?
+2. `audience_relevance` — does it matter to BioInsight/bioinformatics readers?
+3. `novelty` — is it genuinely new, surprising, or assumption-changing?
+4. `consequence` — is there a clear practical, scientific, translational, or community implication?
+5. `storyability` — can the core news be explained clearly without distortion?
+6. `timeliness` — why does it deserve attention now?
 
 Interpretation:
 
-- 25-30: CRITICAL/HIGH candidate
-- 20-24: HIGH
-- 15-19: MEDIUM
-- 10-14: WATCH
-- <10: usually omit
+- 25-30: lead-story candidate
+- 21-24: strong follow-up story
+- 17-20: newsroom watch; include only when strategically important or the day is quiet
+- <17: normally omit from visible daily coverage
 
-A breaking infrastructure or security change may be promoted to CRITICAL even if novelty is low.
+There is no minimum story quota.
 
-Do not promote a paper merely because it has a large benchmark, fashionable AI framing, or high social appeal.
+A CRITICAL workflow/security/infrastructure event may bypass the numerical threshold when urgency itself is the story.
 
-## Social score /30
+## 3. Operational urgency
 
-Score each eligible candidate dimension 0-5:
+Maintain operational urgency separately from News Value:
 
-1. Novelty/surprise
-2. Public interest
-3. Visual potential
-4. Simplicity of explanation
-5. Scientific importance
-6. Curiosity/emotional pull without sensationalism
+- `CRITICAL`: immediate action, deadline, outage, security/integrity risk, breaking migration, or result-changing infrastructure event;
+- `HIGH`: material workflow/scientific consequence worth prompt attention;
+- `MEDIUM`: meaningful but not urgent;
+- `WATCH`: verified item worth monitoring but not normal lead coverage.
 
-Use 22/30 as a normal threshold for Social Candidates. Lower it only on a genuinely quiet day and state that coverage was low.
+Do not treat these labels as scientific-quality scores.
 
-A scholarly Social Candidate must already have verified peer-review status. Never score an excluded paper for social selection.
+## 4. Social/Telegram compatibility score
 
-## Evidence-risk penalty
+Telegram Handoff v1 still expects `social_score` for downstream compatibility.
 
-Social appeal is not the same as editorial priority. After `social_score`, apply an evidence-risk penalty derived from the Evidence Card:
+Compute it only after an item passes the Story Gate. Score 0-5 on:
 
-- `LOW` overhype risk -> 0
-- `MEDIUM` -> 1
-- `HIGH` -> 3
+1. curiosity without sensationalism;
+2. clarity for the intended audience;
+3. visual/format potential;
+4. concise explainability;
+5. audience relevance;
+6. discussion/share potential without distorting evidence.
 
-Compute:
+This score helps choose presentation format. It does **not** decide whether the item is news and must not override News Value.
 
-`editorial_priority_score = social_score - evidence_risk_penalty`
+Do not subtract evidence risk from News Value or Social Score. High-risk stories may be highly newsworthy; instead route them to a deeper format and preserve stronger caveats.
 
-Use this score only for ordering eligible Social Candidates. Keep the original `social_score` visible in Radar output so the penalty does not masquerade as a scientific score.
+## 5. Overhype risk
 
-A HIGH-risk story may still rank first when its public value is strong, but it must retain its risk modifiers, limitations and `do_not_say_fa` boundaries.
+Classify separately:
 
-Do not add extra penalty merely because a topic is AI, clinical, causal or controversial. Penalize the verified evidence-risk state, not the topic label.
+- `LOW`: straightforward evidence and low misinterpretation risk;
+- `MEDIUM`: important qualifiers, benchmark scope, or prediction/measurement distinction could be lost;
+- `HIGH`: AI capability, clinical implication, causality, observational inference, spectacular benchmark, or other framing is highly vulnerable to overstatement.
 
-## Reproducibility score /10
+Overhype risk changes treatment, not truth and not newsworthiness.
 
-Use one point for each verified item:
+Typical routing:
+
+- LOW + simple -> FLASH or STANDARD
+- MEDIUM -> STANDARD, sometimes DEEP
+- HIGH -> usually DEEP or evidence-critical article treatment
+
+## 6. Reproducibility assessment
+
+Use one point for each verified criterion only when a detailed reproducibility audit is requested or materially relevant:
 
 1. Public code
-2. Public or clearly accessible data
-3. Versioned release/tag or archival snapshot
-4. License stated
+2. Public/accessible data
+3. Versioned release/tag/archive
+4. License
 5. Environment/dependency specification
-6. Container or portable environment
+6. Container/portable environment
 7. Automated tests
 8. CI visible
 9. Example/test data and runnable instructions
 10. Benchmark protocol sufficiently described
 
-Use `N/A` rather than zero when a criterion is not applicable. Use `unknown` internally when the criterion was not checked or could not be verified.
+Use `N/A` when not applicable and `unknown` when not checked.
 
-Report a numeric score only when enough criteria were actually inspected to make the denominator meaningful. Otherwise report `insufficient evidence` and list the verified components.
+Do not expose a `/10` score in the default newsroom report unless enough criteria were actually inspected and the score is useful to the story. Otherwise say `insufficient evidence` or keep the audit internal.
 
-## Confidence
+## 7. Confidence
 
-- `HIGH`: primary source plus strong supporting evidence; material details are consistent.
-- `MEDIUM`: primary source is available but some implementation, validation, or contextual evidence is missing.
-- `LOW`: eligible source exists but important implementation, validation, or contextual evidence remains incomplete.
+Evidence confidence remains separate from News Value:
 
-Do not use `LOW` confidence to retain a non-peer-reviewed scholarly paper. Such papers are excluded by the eligibility gate.
+- `HIGH`: primary source plus consistent material supporting evidence;
+- `MEDIUM`: primary source verified but some implementation/validation context remains incomplete;
+- `LOW`: eligible source exists but important contextual evidence is incomplete.
 
-## Signal evidence strength
+`LOW` confidence cannot be used to retain an ineligible scholarly paper.
 
-A Signal of the Day is not scored like a single item. Classify it using the evidence graph rules in `output-contract.md`:
+## 8. Signal strength
 
-- `OBSERVATION`: one strong event or several closely related observations that are not yet enough for trend language.
-- `EMERGING_SIGNAL`: at least two independent eligible observations from different projects or event origins that support the same directional interpretation.
-- `ESTABLISHED_TREND`: use rarely; requires broader repeated evidence across time or independent sources, not just one daily run.
+Signals are optional and use evidence classes rather than item scores:
 
-Do not call a single paper a trend merely because it is important.
+- `OBSERVATION`: one strong event or several closely related observations that do not justify directional synthesis;
+- `EMERGING_SIGNAL`: at least two independent eligible observations from different projects/event origins support the same direction;
+- `ESTABLISHED_TREND`: rare; requires repeated independent evidence across time, not one daily run.
+
+Never create a Signal simply because the output template has a Signal section.
