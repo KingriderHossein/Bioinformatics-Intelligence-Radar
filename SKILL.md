@@ -1,138 +1,175 @@
 ---
 name: bioinformatics-intelligence-radar
-description: Run a source-grounded bioinformatics news and technical-intelligence radar using a curated monitoring roster plus verified peer-reviewed scholarly literature, software, database, dataset, and infrastructure sources. Use when the user asks for daily or periodic bioinformatics news monitoring, a bioinformatics intelligence report, peer-reviewed paper/tool/database/release surveillance, reproducibility checks, benchmark-claim triage, emerging signals, social-media story candidates, or continuation of a prior Radar run. Exclude preprints and any scholarly article whose peer-review status cannot be positively verified from every user-visible Radar section and downstream Telegram handoff.
+description: Run a source-grounded bioinformatics intelligence newsroom that discovers current papers, software, databases, datasets, infrastructure changes, benchmarks, corrections, and emerging signals; verifies scientific eligibility and evidence; suppresses duplicates; then selects only genuinely newsworthy stories and writes them in concise Persian newsroom form. Use for daily/periodic bioinformatics monitoring, technical alerts, important peer-reviewed developments, story discovery, BioInsight editorial selection, Telegram candidates, Deep Dives, and continuation of prior Radar runs. Exclude preprints and any scholarly article whose peer-review status cannot be positively verified from all user-visible coverage and downstream handoffs.
 ---
 
 # Bioinformatics Intelligence Radar
 
-Protocol version: 2.7.0
+Protocol version: 3.0.0
 
-Run adaptive discovery first, then narrow through eligibility verification, deduplication, material-change detection, Evidence Cards, scoring, deep verification, editorial routing, and report construction. Treat this file as the control plane. Load detailed policies from `references/` only when the relevant stage is reached.
+Radar 3.0 has two internal layers:
+
+1. **Intelligence Engine** — discover, verify, deduplicate, and preserve evidence.
+2. **Newsroom Engine** — decide what deserves attention, find the best story angle, and write readable news.
+
+The user-visible product is the newsroom output, not the backend audit.
+
+## Product principle
+
+Radar must answer:
+
+**What changed, what is true, what deserves attention, and how should it be told?**
+
+Do not behave like a paper inventory, literature-review table, or repository audit unless the user explicitly asks for those formats.
 
 ## Core invariants
 
-1. **Use the Curator roster as the persistent monitoring layer when available.** Load the Bioinformatics Source Curator handoff before scheduled or periodic discovery. Curator source approval is source-level trust only and never replaces Radar item-level verification.
-2. **Peer review is an eligibility gate for scholarly literature.** Positively verify peer-review status before scoring or exposing a scholarly item. Preprints may be used only for identity resolution or to locate a later peer-reviewed publication.
-3. **Non-literature events use their own primary-source gate.** Official software releases, database updates, datasets, infrastructure changes, security notices, and service changes do not require paper peer review; verify them through the appropriate official source.
-4. **Use one Evidence Card per canonical eligible story.** After identity and eligibility are resolved, capture material facts, exact numbers, source provenance, benchmark status, limitations, reproducibility evidence, and risk boundaries in `references/evidence-card.md`. Derive all later story surfaces from that card.
-5. **Use prior Radar state when available, but never invent it.** Apply `references/run-state.md` for cross-run deduplication and material-change detection. Missing state must not fail the run.
-6. **Evidence precedes tone.** Use `classify information -> verify evidence -> update Evidence Card -> select tone -> write`. Tone may change framing, pacing, and emphasis but never claim strength, causality, clinical readiness, benchmark certainty, or uncertainty.
-7. **Do not invent counts or metadata.** Maintain telemetry during the run when practical. If a count was not actually tracked, say so rather than reconstructing or estimating it.
-8. **No Skill calls another Skill directly.** The outer orchestrator may load a Source Curator handoff, persist Radar state, or execute the downstream Telegram Editor workflow. Radar does not invoke those Skills itself.
-9. **Prefer fewer strong items over filler.** There is no minimum story quota. A low-news day is a valid result.
-10. **Search adaptively.** Stop broad discovery when coverage is adequate, two consecutive passes add no new HIGH/material event, and no unresolved critical event remains. Continue exact verification for already shortlisted items.
+1. **Curator-first monitoring when available.** Use the Bioinformatics Source Curator handoff as the first persistent monitoring layer. Source approval never replaces item-level verification.
+2. **Peer review is a hard gate for scholarly literature.** Verify it before News Value scoring or visible coverage. Preprints may be used only for identity resolution or finding a later peer-reviewed publication.
+3. **Official non-literature events use their own primary-source gate.** Software releases, database/dataset/infrastructure/service/security events do not require paper peer review.
+4. **One Evidence Card per canonical eligible event.** Exact facts, dates, numbers, benchmark status, limitations, source provenance, and `do_not_say_fa` live there.
+5. **One Story Card per selected newsroom story.** Derive angle, headline, lead, consequence, format, and News Value from the Evidence Card through `newsroom-engine.md`.
+6. **Evidence is a gate; newsworthiness is a separate judgment.** A scientifically strong paper may still be omitted if it is not newsworthy.
+7. **Use prior run state only when it truly exists.** Suppress duplicates and detect material change with `run-state.md`; never invent history.
+8. **No minimum quota.** A quiet day is valid. Never add filler to make the report look complete.
+9. **Do not invent counts or metadata.** Report only telemetry actually tracked in the run.
+10. **No Skill calls another Skill directly.** The outer orchestrator owns Curator transfer, optional state persistence, and downstream Telegram Editor execution.
 
 ## Reference routing
 
-Load references progressively in this order.
+Load progressively.
 
-### Curated source intake
-- Read `references/curator-handoff.md` when a Curator handoff is available, when Google Sheets access can resolve the configured source registry, or for daily/periodic runs where the curated roster should be used.
-- Read `references/watchlists.md` as the fallback and coverage-gap layer, not as a replacement for a valid Curator roster.
+### Source intake and discovery
 
-### Discovery, eligibility, and state
-- Read `references/source-policy.md` before source selection and verification.
-- Read `references/search-playbook.md` when constructing discovery queries, adaptive stop logic, verification tiers, or deduplication.
-- Read `references/peer-review-policy.md` before any scholarly item is scored, shortlisted, or drafted.
-- Read `references/run-state.md` when prior Radar state is present or cross-run deduplication, material-change detection, telemetry, or Curator feedback is relevant.
+- `references/curator-handoff.md` — curated source roster intake.
+- `references/watchlists.md` — coverage-gap/fallback monitoring.
+- `references/source-policy.md` — source hierarchy and claim-level verification.
+- `references/search-playbook.md` — adaptive dated discovery and deduplication.
+- `references/peer-review-policy.md` — mandatory scholarly eligibility gate.
+- `references/run-state.md` — optional cross-run state, material-change logic, telemetry, Curator feedback.
 
-### Evidence and ranking
-- Read `references/evidence-card.md` before converting an eligible story into a report candidate.
-- Read `references/scoring.md` when ranking eligible candidates, selecting Social Candidates, assigning risk-adjusted editorial priority, or evaluating reproducibility.
-- For high-priority items and benchmark claims, verify the central claim against the closest primary source before narrative drafting.
+### Evidence and newsroom selection
 
-### Editorial and output
-- Read `references/editorial-tone-engine.md` after evidence verification and before drafting high-priority narrative items.
-- Read `references/output-contract.md` when constructing the user-visible Radar report. Treat it as the authoritative section schema and final-output contract.
+- `references/evidence-card.md` — internal factual source of truth.
+- `references/newsroom-engine.md` — Story Gate, News Value, angle selection, Story Card, headlines, leads, channel/article treatment.
+- `references/scoring.md` — News Value, operational urgency, Telegram compatibility score, confidence and Signal classes.
+- `references/editorial-tone-engine.md` — newsroom tones and evidence modifiers.
 
-### Orchestration
-- Read `references/orchestration.md` when ownership of Curator intake, run-state persistence, Telegram handoff transfer, repository-mode execution, or failure behavior is relevant.
-- Read `references/telegram-handoff.md` only when a Telegram editorial step is requested or scheduled.
+### Output and orchestration
 
-Do not duplicate detailed schemas from these references inside this control file.
+- `references/output-contract.md` — authoritative visible Newsroom Radar schema.
+- `references/telegram-handoff.md` — downstream Telegram Handoff v1.
+- `references/orchestration.md` — ownership and Curator/state/Editor transfer rules.
+
+Do not duplicate detailed schemas from these references in the control plane.
 
 ## Workflow
 
 1. **Resolve the reporting window.**
-   - For `today` or a scheduled daily run, use the previous 36 hours as the primary window.
-   - Expand to 7 days only for slow-moving categories, delayed indexing, or explicit recovery.
-   - State exact dates in the report.
-2. **Load curated monitoring sources when available.** Use `curator-handoff.md`. Treat the roster as the first persistent monitoring pass. If unavailable or incomplete, use built-in watchlists for resilience and coverage gaps.
-3. **Load prior run state when available.** Use `run-state.md`. If no valid prior state exists, continue with within-run deduplication and mark the actual state condition rather than inventing history.
-4. **Discover adaptively.** Follow staged passes in `search-playbook.md`; do not run every fallback query mechanically when coverage is already adequate.
-5. **Establish identity and eligibility.** Verify scholarly peer-review status before scoring. Resolve preprint-to-journal relationships and retain the eligible peer-reviewed version.
-6. **Deduplicate and detect material change.** Use DOI, PMID, release tag, database release ID, dataset accession, title/version relationships, and prior story ledger when available. Suppress same-story/no-change items; retain verified material updates.
-7. **Create preliminary Evidence Cards.** Build one card per canonical eligible story that survives relevance triage.
-8. **Score only eligible cards.** Apply `scoring.md`; no novelty, urgency, social score, or source priority can restore ineligible literature.
-9. **Deepen verification selectively.** Use Tier 3 verification only for Executive Brief, CRITICAL/HIGH, major benchmark, Social, Deep-Dive, or high-risk evidence stories.
-10. **Finalize Evidence Cards.** Update exact facts, benchmark attribution, limitations, reproducibility evidence, risk modifiers, and `do_not_say_fa` before writing.
-11. **Select editorial treatment.** Apply the tone engine only after evidence state and risk modifiers are known.
-12. **Construct the report.** Follow `output-contract.md`; use no minimum item quota and report only observed statistics.
-13. **Build a Telegram handoff only when needed.** Derive `Telegram Handoff v1` from the same final Evidence Cards and verified Social Candidates. Do not invoke or search for the Editor from inside Radar.
-14. **Run the release gate.** Fix any failed gate before finalizing. Update persistent run state only after gates pass when a store is available.
-
-## Priority routing
-
-Prioritize workflow-impacting events over routine papers when they can change analyses or break pipelines. Typical high-priority classes include:
-
-- API, schema, authentication, endpoint, FTP, cloud, or file-format changes;
-- deprecations and end-of-support dates;
-- reference genome, annotation, taxonomy, or clinical-database updates that can alter results;
-- security or integrity issues in widely used tools;
-- major stable releases of core workflow or analysis software;
-- new datasets with clear benchmark or method-development value;
-- strong benchmark claims that require independent scrutiny.
-
-Use `CRITICAL`, `HIGH`, `MEDIUM`, or `WATCH` as operational urgency labels when supported.
+   - Daily/default: previous 36 hours.
+   - Use up to 7 days only for delayed indexing, slow-moving sources, explicit recovery, or context.
+   - State exact dates.
+2. **Load Curator handoff when available.** Use it first; supplement only for coverage gaps.
+3. **Load prior run state when available.** If state is absent, continue without claiming cross-run suppressions.
+4. **Discover adaptively.** Follow staged passes in `search-playbook.md`; do not mechanically exhaust every fallback query.
+5. **Resolve identity and eligibility.** Verify peer review for scholarly items and official status for non-literature events.
+6. **Deduplicate and detect material change.** Suppress same-story/no-change items; keep publication/release transitions, corrections, retractions, new validation, and other material updates.
+7. **Build preliminary Evidence Cards.** Only for eligible items with plausible relevance.
+8. **Apply the Story Gate.** Write the internal `news_statement_fa`; omit items that are merely recent but not meaningfully newsworthy.
+9. **Score News Value.** Use `scoring.md`; evidence quality is not part of News Value because it was already handled by eligibility/evidence gates.
+10. **Deepen verification selectively.** Spend Tier-3 effort on lead stories, operational alerts, high News Value stories, major benchmarks, downstream editorial candidates, and high-risk claims.
+11. **Finalize Evidence Cards.** Preserve exact facts, attribution, uncertainty, limitations, and `do_not_say_fa`.
+12. **Build Story Cards.** Generate multiple angle/headline options internally and select the strongest evidence-safe framing.
+13. **Write the newsroom report.** Follow `output-contract.md`; lead with the news, not the method or journal.
+14. **Build Telegram Handoff only when needed.** Use final Evidence Cards + Story Cards; do not invoke or search for the Editor from inside Radar.
+15. **Run final gates.** Only after both evidence and newsroom gates pass may state be persisted by the outer host.
 
 ## Verification depth
 
-Verify only what is material to the item and available from evidence.
+Use the lightest sufficient tier.
 
-- Tier 1: identity candidate, source class, date, and enough context for triage.
-- Tier 2: eligibility, primary claim/event, exact key facts, main limitation, workflow relevance.
-- Tier 3: comparator, benchmark context, external validation, code/data/license/release/environment/container/tests/CI when material.
+### Tier 1 — Discovery
 
-Do not infer repository health, sample size, benchmark design, reproducibility, clinical value, or prior-run history from absence of evidence.
+Identity, source class, date, enough context for triage.
+
+### Tier 2 — Story shortlist
+
+Eligibility, primary event/finding, exact material facts, main limitation, and consequence.
+
+### Tier 3 — Deep newsroom verification
+
+Comparator/benchmark scope, validation, code/data/runtime evidence, hardware when material, and high-risk claim boundaries.
+
+Do not audit repository metadata or reproducibility merely to fill a template.
+
+## Story selection
+
+A strong Radar story usually contains at least one of:
+
+- material workflow impact;
+- a challenged assumption or important negative result;
+- a genuinely new practical capability;
+- a clear limitation/failure mode of a common method;
+- a consequential dataset/resource;
+- independent validation that changes confidence;
+- correction/retraction/security/migration/deprecation significance;
+- a result with a clear scientific or translational consequence;
+- an unexpected trade-off worth understanding.
+
+Prestigious journal publication, fashionable AI wording, large parameter count, repository popularity, or a high benchmark number alone are not sufficient.
+
+## Default visible report
+
+The normal report is compact and editorial:
+
+- **خبر اول** — zero or one lead story.
+- **ارزش دنبال‌کردن** — usually 1-4 additional stories.
+- **هشدار عملی** — only when needed.
+- **سیگنال امروز** — optional; never manufacture one.
+- **انتخاب تحریریه** — best 2-5 candidates and suggested format/angle.
+- **برای Deep Dive** — optional 1-3 concise research questions.
+- **زیر نظر** — short Watchlist.
+- **پایش امروز** — observed-only telemetry, compact.
+
+Detailed peer-review tables, repository health, reproducibility scores, benchmark audit tables, raw Evidence Cards/Story Cards, and long statistics are hidden by default and shown only on request or when essential to a story.
 
 ## Cross-run behavior
 
 When valid prior state exists:
 
-- same canonical story + no material change -> suppress from normal news output;
-- same story + verified material change -> report as an update and state what changed;
-- preprint -> peer-reviewed publication -> `PUBLICATION_TRANSITION` using the journal version;
+- same canonical story + no material change -> suppress;
+- same story + meaningful verified update -> report the update if it passes the Story Gate;
+- preprint -> peer-reviewed publication -> `PUBLICATION_TRANSITION`, using the journal version;
 - prerelease -> stable -> `RELEASE_TRANSITION`;
-- correction/retraction -> re-surface according to impact.
+- correction/retraction -> re-surface according to consequence.
 
-When state is missing, do not claim these suppressions occurred.
+When state is missing, do not claim prior suppressions occurred.
 
 ## Release gate
 
-Before finalizing a substantial Radar report, confirm all of the following:
+Before finalizing:
 
-- a valid Curator handoff was used when supplied; malformed rows were not guessed or silently repaired;
-- source-level Curator approval was not treated as paper peer-review proof or item importance;
-- every visible scholarly paper passed `peer-review-policy.md`;
-- current claims are supported by sources and dates that match the reporting window;
-- event date, publication date, observed date, and effective date are not conflated;
-- preprint and journal versions of the same work are deduplicated correctly;
-- cross-run duplicates were suppressed only when valid state existed;
-- material updates were not discarded as duplicates;
-- final visible facts and qualifiers match their Evidence Cards;
-- author-reported benchmarks are not rewritten as independently verified facts;
-- causal, clinical, AI-capability, and trend language does not exceed the evidence;
-- infrastructure changes are not buried below routine literature when workflow impact is higher;
-- no minimum quota introduced filler;
-- report sections and measurable statistics follow `output-contract.md`;
-- evidence-risk modifiers survive shortening, Social Candidate selection, and Telegram handoff;
-- Radar did not invoke Source Curator or Telegram Editor as a downstream Skill;
-- persistent run state, if used, is updated only after the evidence/release gates pass.
+- use a supplied valid Curator handoff without guessing malformed rows;
+- verify every visible scholarly paper under `peer-review-policy.md`;
+- prefer primary sources for central claims and official changes;
+- keep event/publication/observed/effective dates distinct;
+- deduplicate preprint/journal and repeated announcements;
+- suppress cross-run duplicates only with real prior state;
+- preserve material updates;
+- make every visible fact consistent with its Evidence Card;
+- make every headline/angle consistent with its Story Card;
+- keep author-reported benchmarks attributed;
+- keep causal, clinical, prediction/measurement, AI-capability, and trend language within evidence;
+- make the lead reach the actual news quickly;
+- exclude routine eligible items that fail the Story Gate;
+- avoid filler and artificial Signals;
+- keep backend audit from overwhelming the visible newsroom product;
+- never invoke Source Curator or Telegram Editor from inside Radar.
 
-## Language and source policy
+## Language policy
 
-Write the complete Radar report in Persian by default. Change the report language only when the user explicitly requests another language.
+Write the user-visible Radar in Persian by default.
 
-Keep official tool names, package names, database names, repository names, version strings, identifiers, gene/protein symbols, command names, API fields, and precision-sensitive technical terms in English when translation would reduce accuracy.
+Keep official tool names, database names, package names, repository names, version strings, identifiers, gene/protein symbols, API fields, and precision-sensitive terms in English when translation would reduce accuracy.
 
-Do not use Persian-language web sources unless the user explicitly requests them.
+Do not use Persian-language web sources unless the user explicitly requests them. Persian-language media may inform newsroom-design research, but primary scientific facts must still come from appropriate primary sources.
