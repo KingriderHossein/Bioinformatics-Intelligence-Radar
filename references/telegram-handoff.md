@@ -1,12 +1,12 @@
 # Telegram Handoff v1
 
-Build this handoff only after Radar quality gates pass and only when an outer orchestrator requests, schedules, or otherwise includes a Telegram editorial step in the same workflow.
+Build this handoff only after Radar evidence gates **and** the Newsroom Release Gate pass, and only when an outer orchestrator includes a Telegram editorial stage.
 
-Handoff version remains `1.0` for compatibility with Bioinformatics Telegram Editor. Radar 2.7.x changes how the handoff is produced internally: each candidate must be derived from its final Evidence Card rather than reconstructed independently.
+Handoff version remains `1.0` for compatibility with Bioinformatics Telegram Editor. Radar 3.0 changes the internal producer: candidates now inherit factual boundaries from Evidence Cards and editorial framing from Story Cards.
 
-The handoff is an internal machine-readable contract. Do not expose raw JSON unless the user explicitly asks for it.
+The handoff is internal machine-readable state. Do not expose raw JSON unless the user explicitly asks.
 
-Read `peer-review-policy.md`, `evidence-card.md`, and `scoring.md` before constructing it.
+Read `peer-review-policy.md`, `evidence-card.md`, `newsroom-engine.md`, and `scoring.md` before constructing it.
 
 ## Eligibility invariant
 
@@ -14,12 +14,12 @@ Telegram Handoff v1 must contain no non-peer-reviewed scholarly paper.
 
 For every scholarly candidate:
 
-- peer review must already be positively verified by Radar;
-- the peer-reviewed journal/proceedings record must be the factual authority;
-- a preprint-only or uncertain-review-status record must not enter the handoff;
-- a preprint-to-journal duplicate must resolve to the peer-reviewed version.
+- peer review was positively verified by Radar;
+- the peer-reviewed journal/proceedings record is factual authority;
+- a preprint-only or uncertain-review-status record is absent;
+- preprint-to-journal duplicates resolve to the peer-reviewed version.
 
-Software releases, official database updates, datasets, infrastructure changes, security notices, and service changes remain eligible when verified from the appropriate official source.
+Verified software releases, official database updates, datasets, infrastructure/security/service changes, corrections, and retractions remain eligible under their official-source rules.
 
 ## Top-level object
 
@@ -30,15 +30,15 @@ Use:
 - `radar_date`: ISO date
 - `reporting_window`: object with `start` and `end`
 - `candidate_count`: exact candidate count
-- `candidates`: eligible Social Candidate objects
+- `candidates`: newsroom-selected candidate objects
 
-Do not force `candidate_count` to 3-5 on low-news days. It must equal the actual selected array length.
+Do not force 3-5 candidates on a quiet day. `candidate_count` must equal the array length.
 
 ## Candidate object
 
-For each selected candidate include:
+Keep the established v1 compatibility fields:
 
-- `id`: stable daily candidate ID in the form `BIR-YYYYMMDD-NN`
+- `id`: `BIR-YYYYMMDD-NN`
 - `topic`
 - `scientific_title`
 - `suggested_social_title_fa`
@@ -47,92 +47,129 @@ For each selected candidate include:
 - `why_it_matters_fa`
 - `content_type`: `peer_reviewed`, `software_release`, `database_update`, `dataset`, `service_change`, or `other`
 - `publication_status`
-- `peer_review_verified`: `true` for scholarly paper candidates; `null` or omit for non-literature events
-- `priority`
-- `social_score`
+- `peer_review_verified`: `true` for scholarly candidates; omit/null for non-literature events
+- `priority`: operational urgency when applicable
+- `social_score`: compatibility presentation score from `scoring.md`
 - `overhype_risk`
 - `claim_status`
 - `key_facts`
 - `limitations_fa`
 - `do_not_say_fa`
-- `source`: `primary_name`, `primary_url` when available, and DOI/PMID/release tag or another durable identifier when available
+- `source`: `primary_name`, `primary_url` when available, and DOI/PMID/release/accession when available
 - `radar_primary_tone`
 - `radar_tone_modifiers`
 - `recommended_editorial_tone`
 
-Recommended fields:
+Add these Radar 3.0 newsroom fields when available:
+
+- `news_value_score`
+- `news_statement_fa`
+- `selected_angle_type`
+- `selected_angle_fa`
+- `headline_options_fa`
+- `recommended_post_type`: `FLASH`, `STANDARD`, or `DEEP`
+- `recommended_formats`
+- `article_worthy`
+- `visual_worthy`
+- `story_key`
+
+Recommended evidence fields remain:
 
 - `benchmark_claims`
 - `repository`
-- `recommended_post_type`: `FLASH`, `STANDARD`, or `DEEP`
-- `recommended_formats`
-- `editorial_angle_fa`
 - `tone_rationale_fa`
-- `editorial_priority_score`: Radar's risk-adjusted ranking score; downstream may use it for ordering but must not treat it as scientific evidence
-- `story_key`: internal canonical story identity when useful for traceability
 
-Extra recommended fields must not remove or rename fields expected by Telegram Handoff v1 consumers.
+Additive newsroom fields must not remove or rename fields expected by existing Telegram Handoff v1 consumers.
 
-## Evidence Card derivation
+## Derivation rules
 
-Populate the handoff from the final Evidence Card as follows:
+### From Evidence Card
 
-- identity/date/publication fields <- Evidence Card identity and eligibility
-- `key_facts` <- exact verified facts only
-- `claim_status` and `benchmark_claims` <- claim/evidence state without strengthening
-- `limitations_fa` <- risk boundary and main limitations
-- `do_not_say_fa` <- unsupported stronger interpretations
-- source <- canonical primary source
-- tone modifiers <- inherited Evidence Card modifiers
-- social/editorial scores <- scoring output, without recomputation by the Editor
+Populate:
 
-If the handoff wording conflicts with the Evidence Card, the Evidence Card wins and the handoff must be corrected before transfer.
+- identity/date/publication status;
+- exact numbers and units;
+- claim/evidence status;
+- benchmark attribution;
+- limitations;
+- `do_not_say_fa`;
+- primary source;
+- evidence/tone modifiers.
 
-## Tone transfer rules
+If another field conflicts with the Evidence Card, the Evidence Card wins.
 
-Radar owns evidence classification and literature eligibility. The downstream Editor owns final narrative style.
+### From Story Card
 
-- Preserve every evidence-risk modifier even when the recommended editorial tone is conversational or curiosity-driven.
-- `CURIOSITY_BRIDGE` is a presentation layer, not permission to weaken qualifiers.
-- An author-reported benchmark must remain attributed unless independent verification was actually found.
-- Clinical, causal, preclinical, prediction-versus-measurement, and AI-capability caution must survive all downstream tone changes.
-- For `TECHNICAL_ALERT` items, recommend a direct alert treatment when timing or workflow impact is central.
-- The Editor may change narrative structure but must not violate `radar_tone_modifiers`, `limitations_fa`, `key_facts`, or `do_not_say_fa`.
-- The Editor cannot restore a scholarly paper excluded by the Radar peer-review gate.
+Populate:
+
+- newsroom title/hook/summary;
+- `news_statement_fa`;
+- News Value Score;
+- selected angle;
+- headline options;
+- recommended format/post type;
+- article/visual suitability.
+
+If Story Card framing strengthens the evidence, fix the Story Card before handoff.
+
+## Editorial transfer rules
+
+Radar owns:
+
+- scientific eligibility;
+- factual authority;
+- canonical story identity;
+- Evidence Card;
+- News Value selection;
+- Story Card angle boundaries;
+- non-negotiable limitations and `do_not_say_fa`.
+
+Telegram Editor owns:
+
+- final Telegram narrative;
+- paragraph rhythm;
+- surface headline choice;
+- emoji/formatting;
+- final FLASH/STANDARD/DEEP execution within the handed-off boundaries.
+
+The Editor may choose another evidence-safe headline or narrative structure, but must not violate Evidence Card facts, `limitations_fa`, `do_not_say_fa`, publication status, or claim attribution.
 
 ## Evidence rules
 
 - Preserve exact publication status.
-- Preserve exact numbers, denominators, units, versions, dates, and benchmark context.
-- Preserve whether evidence is author-reported, partner/company-reported, independently verified, preclinical, observational, or computational when material.
-- Put important uncertainty in `limitations_fa`.
-- Populate `do_not_say_fa` with likely overclaims, especially for AI, clinical implications, causality, and large benchmark claims.
-- Use the primary source as factual authority even if the suggested social title is more attractive.
-- Do not invent a URL when unavailable.
+- Preserve exact numbers, denominators, units, versions, dates, and benchmark context when material.
+- Preserve `AUTHOR_REPORTED`, `INDEPENDENTLY_VERIFIED`, observational, preclinical, computational, or company/partner-reported status when relevant.
+- Prediction/inference must not become measurement.
+- Association must not become causation.
+- Research performance must not become clinical readiness.
+- A model must not be described as understanding, deciding, discovering, or replacing experts unless the evidence supports that exact claim.
+- Do not invent URLs.
 
 ## Quality gate before handoff
 
 For every scholarly candidate require:
 
-- identity resolved;
-- peer-review status verified;
-- primary peer-reviewed source resolved;
-- publication status consistent;
-- no preprint-only fallback;
-- final Evidence Card passed consistency gate.
+- resolved identity;
+- verified peer review;
+- resolved primary peer-reviewed source;
+- consistent publication status;
+- final Evidence Card consistency;
+- final Story Card consistency.
 
 For every candidate require:
 
-- `candidate_count` will match final array length;
-- exact facts match the Evidence Card;
-- `AUTHOR_REPORTED` or equivalent attribution survives;
-- overhype risk and `do_not_say_fa` are present when material;
-- no cross-run duplicate is handed off as a new story unless a material change was verified.
+- the Story Gate passed;
+- candidate count will match array length;
+- News Value justified editorial selection;
+- exact facts match Evidence Card;
+- title/angle match Story Card without overreach;
+- material limitations and `do_not_say_fa` are present;
+- no same-story/no-material-change duplicate is handed off as new news.
 
 ## Downstream behavior
 
-Radar never invokes, discovers, or checks availability of Bioinformatics Telegram Editor. Radar only constructs the handoff.
+Radar never invokes, discovers, or checks availability of Bioinformatics Telegram Editor. Radar constructs the handoff only.
 
-The outer orchestrator may apply Telegram Editor instructions from an installed Skill or by loading its canonical GitHub repository directly. The Editor owns narrative and Telegram formatting; Radar owns evidence selection, peer-review eligibility, verification, canonical story state, and the non-negotiable evidence modifiers that constrain tone.
+The outer orchestrator may load Telegram Editor from an installed Skill or directly from its canonical GitHub repository and apply it to the in-context handoff.
 
-If no downstream editorial step is available, Radar must still complete successfully and must not emit a missing-tool or missing-Skill error.
+If downstream editing is unavailable, Radar still completes successfully and must not emit a missing-Skill failure.
