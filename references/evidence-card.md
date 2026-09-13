@@ -1,75 +1,85 @@
 # Evidence Card v1
 
-Use this internal contract after identity and eligibility are resolved and before ranking, deep verification, report writing, Signal construction, or Telegram handoff.
+Use this internal contract after identity and eligibility are resolved and before Newsroom Story Gate, deep verification, report writing, Signal construction, or Telegram handoff.
 
-The Evidence Card is the single internal source of truth for one canonical story. Do not expose the raw card unless the user explicitly asks for diagnostics or structured internals.
+The Evidence Card is the factual source of truth for one canonical eligible event. It is **not** the newsroom story itself.
+
+Do not expose raw cards unless the user explicitly asks for diagnostics or structured internals.
 
 ## Core invariant
 
-Create one Evidence Card per canonical eligible story. All later Radar surfaces must derive factual claims, qualifiers, risk boundaries, and exact numbers from that card rather than re-researching or rewriting the item independently.
+Create one Evidence Card per canonical eligible event.
 
-If later verification changes a fact, update the Evidence Card first and then regenerate downstream wording from it.
+All downstream factual claims, exact numbers, qualifiers, benchmark attribution, and evidence boundaries must derive from the card.
+
+If later verification changes a fact, update the Evidence Card first, then regenerate the Story Card and downstream wording.
 
 ## Identity
 
 Record when available:
 
-- `story_key`: stable internal key derived from content type plus a durable canonical identifier
-- `content_type`: `peer_reviewed`, `software_release`, `database_update`, `dataset`, `service_change`, `security_notice`, or `other`
+- `story_key`: stable internal key derived from content type plus durable canonical identifier
+- `content_type`: `peer_reviewed`, `software_release`, `database_update`, `dataset`, `service_change`, `security_notice`, `correction`, `retraction`, or `other`
 - `scientific_title`
 - `canonical_id`: DOI, PMID, release tag, database release ID, dataset accession, or another durable identifier
 - `canonical_source_name`
 - `canonical_source_url`
-- `curator_target_id`: preserve when the discovery came from a Curator row
+- `curator_target_id`: preserve when discovery came from a Curator row
 
-Prefer durable identifiers in this order when applicable: DOI -> PMID -> official release/database/dataset identifier -> canonical official event URL.
+Prefer durable identifiers when available.
 
 ## Dates
 
-Keep dates separate. Do not collapse them into one generic date.
+Keep distinct:
 
-- `event_date`: when the change/event became effective or occurred
-- `publication_date`: publisher publication date for a paper
-- `observed_date`: when Radar verified the item
-- `effective_date`: for migrations/deprecations when distinct from announcement date
+- `event_date`
+- `publication_date`
+- `observed_date`
+- `effective_date`
+
+Do not collapse announcement, publication, observation, and effective dates into one generic date.
 
 ## Eligibility
 
 Record:
 
 - `publication_status`
-- `peer_review_verified`: `true` for eligible scholarly literature; omit or use `null` for non-literature events
-- `eligibility_state`: `ELIGIBLE` or an exclusion state
-- `eligibility_basis`: concise reason and source class
+- `peer_review_verified`: `true` for eligible scholarly literature; omit/null for non-literature events
+- `eligibility_state`
+- `eligibility_basis`
 
-Do not create a normal Evidence Card for a scholarly record that fails the peer-review gate. For identity-resolution notes about an excluded preprint, keep only minimal transient notes needed to resolve a later peer-reviewed version.
+Do not create a normal Evidence Card for scholarly literature that fails the peer-review gate.
+
+Preprint-only identity notes may exist transiently only to resolve a later peer-reviewed version.
 
 ## Claims
 
-Record only claims supported by verified evidence:
+Record only verified claims:
 
 - `central_claim`
-- `claim_status`: for example `peer-reviewed finding`, `author-reported benchmark`, `independently verified benchmark`, or `official service change`
+- `claim_status`: e.g. `peer-reviewed finding`, `author-reported benchmark`, `independently verified benchmark`, `official service change`
 - `key_facts`: exact numbers, denominators, units, versions, qualifiers, and comparator context
-- `benchmark_claims`: claim, comparator, dataset, hardware when material, and independent-verification state
+- `benchmark_claims`: claim, comparator, dataset, hardware when material, independent-verification state
 - `validation_type`: internal, external, prospective, experimental, computational, none, or mixed when known
 
 Never upgrade `AUTHOR_REPORTED` to an independent fact during summarization.
 
-## Evidence
+## Evidence provenance
 
 Record:
 
 - `primary_source`
 - `supporting_sources`: only when they add material evidence
 - `independent_verification`: `YES`, `NO`, or `UNKNOWN`
-- `evidence_notes`: short notes about conflicts, missing context, or provenance
+- `evidence_notes`: conflicts, missing context, provenance, or unresolved caveats
 
-Use the source closest to the claim. Search snippets and secondary summaries may help discovery but must not become the final authority when a suitable primary source exists.
+Use the source closest to each claim. Publisher, release page, repository, data archive, and official service documentation may each be authoritative for different fields.
 
-## Reproducibility
+Search snippets and secondary summaries are discovery aids, not final authority when an appropriate primary source exists.
 
-Record only verified fields:
+## Reproducibility/runtime evidence
+
+Record only what was actually verified:
 
 - `code`
 - `data`
@@ -82,7 +92,9 @@ Record only verified fields:
 - `example_or_test_data`
 - `benchmark_protocol`
 
-Use `unknown` rather than inferring absence. Let `references/scoring.md` decide whether the verified coverage is enough for a numeric reproducibility score.
+Use `unknown` rather than inferring absence.
+
+These fields are normally backend evidence and should not be forced into user-visible news copy unless they materially affect the story.
 
 ## Risk boundary
 
@@ -90,55 +102,48 @@ Record:
 
 - `main_limitation_fa`
 - `overhype_risk`: `LOW`, `MEDIUM`, or `HIGH`
-- `tone_modifiers`: zero to three evidence/context modifiers
-- `do_not_say_fa`: likely but unsupported stronger claims
+- `tone_modifiers`
+- `do_not_say_fa`: likely but unsupported stronger interpretations
 
-Use explicit caution fields when relevant:
+Explicitly protect relevant boundaries:
 
-- clinical readiness
-- causality
-- AI capability or understanding
-- benchmark generalization
-- association versus mechanism
-- preclinical versus clinical evidence
-- prediction versus measurement
+- association versus causality;
+- prediction/inference versus measurement;
+- preclinical versus clinical evidence;
+- technical performance versus clinical utility;
+- internal versus external validation;
+- author-reported versus independently verified benchmark;
+- AI capability versus anthropomorphic interpretation;
+- narrow benchmark versus general capability.
 
-These fields are immutable downstream constraints unless new evidence changes the card itself.
+These constraints survive every downstream transformation unless new evidence changes the card.
 
-## Scores
+## Evidence confidence
 
-After eligibility and sufficient verification, record:
+Record `confidence` as `HIGH`, `MEDIUM`, or `LOW` only after eligibility.
 
-- `technical_score`
-- `social_score`
-- `evidence_risk_penalty`
-- `editorial_priority_score`
-- `confidence`
+Confidence describes completeness/consistency of verified evidence. It is not News Value.
 
-Do not score ineligible scholarly literature.
+Do not use LOW confidence to retain an ineligible scholarly paper.
 
-## Downstream derivation
+## Newsroom handoff
 
-Use the same Evidence Card to derive:
+After the card is complete enough for editorial triage:
 
-- Executive Brief wording
-- Main Radar row
-- Paper/Tool/Database/Dataset detail
-- Benchmark Claims
-- Signal evidence nodes
-- Social Candidate
-- Deep-Dive Candidate
-- Telegram Handoff v1 candidate
+1. pass the card to `newsroom-engine.md`;
+2. apply the internal Story Gate;
+3. compute News Value only for Story-Gate survivors;
+4. create a separate Story Card for selected newsroom stories.
 
-Do not independently restate exact numbers from memory when the card already contains them.
+Do not store headline/angle/lead decisions as factual fields in the Evidence Card.
 
 ## Consistency gate
 
-Before finalizing a story, confirm:
+Before any story is finalized, confirm:
 
-- all visible exact numbers match `key_facts`;
+- visible exact numbers match `key_facts`;
 - publication status matches eligibility;
 - benchmark attribution matches `claim_status` and `independent_verification`;
-- limitations and `do_not_say_fa` survive Social Candidate and Telegram compression;
+- limitations and `do_not_say_fa` survive newsroom compression;
 - event/publication/effective dates are not conflated;
-- no downstream surface is stronger than the central claim in the Evidence Card.
+- Story Card framing does not strengthen the Evidence Card central claim.
