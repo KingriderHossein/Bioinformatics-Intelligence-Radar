@@ -1,5 +1,26 @@
 # Changelog
 
+## 3.0.0 - 2026-09-13
+
+- Reframed Bioinformatics Intelligence Radar as a two-layer product: `Intelligence Engine` for evidence and `Newsroom Engine` for story selection/presentation.
+- Added `references/newsroom-engine.md` with the Story Gate, News Value Score, angle generation, headline/lead rules, Story Card schema, Telegram/article treatment, and newsroom release gate.
+- Made the user-visible product a compact Persian scientific newsroom rather than a default multi-section technical audit.
+- Replaced the old exhaustive visible report contract with `خبر اول`, `ارزش دنبال‌کردن`, optional `هشدار عملی`, optional `سیگنال امروز`, `انتخاب تحریریه`, concise Deep-Dive suggestions, Watchlist, and compact observed-only monitoring telemetry.
+- Moved peer-review tables, repository-health audits, reproducibility scoring, benchmark-audit tables, raw Evidence Cards/Story Cards, and detailed statistics behind an on-request technical appendix unless essential to a story.
+- Separated evidence quality from newsworthiness: evidence now gates eligibility and wording; it is no longer a dimension inside News Value.
+- Added News Value /30 across impact, audience relevance, novelty, consequence, storyability, and timeliness.
+- Removed evidence-risk penalties from story ranking. High overhype risk now changes format depth and caveat strength rather than artificially lowering newsworthiness.
+- Kept a separate Telegram/social compatibility score only for downstream presentation-format selection.
+- Added an internal Story Card derived from the Evidence Card, containing the news statement, selected angle, headline options, lead, essential facts, consequence, visible boundary, and format recommendations.
+- Added explicit newsroom angle types: `RESULT`, `TENSION`, `CONSEQUENCE`, `WORKFLOW_IMPACT`, `SCALE`, `LIMITATION`, and `EXPLAINER`.
+- Added headline rules that prioritize the actual result/consequence over framework names, journal prestige, or generic novelty language.
+- Reworked the tone system around `SCIENTIFIC_NEWSROOM` with `NEWS_BRIEF`, `TECHNICAL_ALERT`, `EVIDENCE_CRITICAL`, `EXPLAINER`, and `SCIENTIFIC_INTELLIGENCE`.
+- Reworked adaptive search so deep verification happens after Story Gate triage instead of treating every eligible paper as a likely output item.
+- Kept strict peer-reviewed-only scholarly coverage and official-source verification for non-literature events.
+- Kept Evidence Card v1, optional run state, material-change detection, duplicate suppression, Curator feedback, and claim-level source provenance from v2.7.0.
+- Kept Telegram Handoff at `1.0` for compatibility, while adding optional newsroom fields such as `news_value_score`, `news_statement_fa`, selected angle, headline options, and article/visual suitability.
+- Documented qualitative newsroom-design provenance across Digiato, Zoomit, Peivast, Euronews Persian, Interesting Engineering, ScienceAlert, Science in Telegram, and Gadget News while explicitly prohibiting direct imitation of any publication's distinctive style.
+
 ## 2.7.0 - 2026-09-11
 
 - Added `references/evidence-card.md` and made one Evidence Card v1 the internal factual source of truth for each canonical eligible story.
