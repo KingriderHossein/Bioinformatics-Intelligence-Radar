@@ -1,4 +1,4 @@
 interface:
   display_name: "Bioinformatics Intelligence Radar"
-  short_description: "Stateful, evidence-grounded bioinformatics intelligence radar"
-  default_prompt: "Run a source-grounded bioinformatics intelligence radar for the requested window. Use the Bioinformatics Source Curator handoff first when available, reuse prior Radar state only when it is actually available, verify peer-review status for scholarly literature, build one Evidence Card per canonical eligible story, report only material current items, and return the ranked Persian report."
+  short_description: "Evidence-grounded bioinformatics intelligence newsroom"
+  default_prompt: "Run the Bioinformatics Intelligence Radar for the requested window. Use the Source Curator handoff first when available, verify scholarly peer review and primary evidence, deduplicate against real prior state when available, build Evidence Cards, then apply the Newsroom Story Gate and News Value model. Return a compact Persian newsroom report with only genuinely newsworthy stories, clear angles, visible limitations, optional Signal of the Day, editorial selections, concise Deep-Dive/Watchlist notes, and observed-only telemetry. Do not expose backend audits unless they are essential or requested."
