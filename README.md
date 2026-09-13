@@ -1,98 +1,152 @@
 # Bioinformatics Intelligence Radar
 
-A reusable ChatGPT Skill for daily bioinformatics news and technical-intelligence monitoring.
+A reusable ChatGPT Skill for source-grounded bioinformatics intelligence and newsroom-style daily coverage.
 
 ## Current protocol
 
-Version: 2.7.0
+Version: **3.0.0**
 
-Version 2.7.0 introduces a stateful evidence pipeline without weakening the strict peer-reviewed-only literature policy.
+Radar 3.0 separates two jobs that older versions mixed together:
 
-The Radar now uses one internal `Evidence Card v1` per canonical eligible story. Identity, dates, exact numbers, benchmark attribution, source provenance, reproducibility evidence, limitations, overhype risk, and `do_not_say_fa` are captured once and reused across the Executive Brief, Main Radar, Benchmark Claims, Signals, Social Candidates, Deep Dives, and Telegram Handoff v1.
+1. **Intelligence Engine** — discover, verify, deduplicate, preserve evidence, and detect material change.
+2. **Newsroom Engine** — decide what is actually worth attention, choose the strongest evidence-safe angle, and write concise readable Persian news.
 
-When prior Radar state is available, `Radar Run State v1` enables cross-run deduplication and material-change detection. Same-story/no-change items can be suppressed, while publication transitions, stable-release transitions, workflow integrations, new independent validation, corrections, retractions, or other material changes remain reportable. Missing state never causes the Radar to fail and prior history is never invented.
+The visible product is no longer a long technical audit by default.
 
-Discovery is adaptive. The Radar checks Curator sources first, fills coverage gaps selectively, resolves eligibility and identity, then reserves deep verification for items likely to affect the final report. Broad discovery stops when coverage is adequate, two consecutive passes add no new HIGH/material event, and no unresolved critical event remains.
+## Product philosophy
 
-The Radar has no minimum story quota. Low-news days are valid and must not be padded with weak, duplicate, or ineligible items.
+Radar should answer:
 
-The scholarly-literature stream remains **peer-reviewed-only**. Preprints, submitted manuscripts, working papers, conference abstracts, and papers with uncertain review status are excluded before scoring and cannot enter the Radar report, Signals, Social Candidates, Deep Dives, Watchlist, Benchmark Claims, or Telegram Handoff v1. Preprint services may be used only for identity resolution or to find a later peer-reviewed publication.
+> What changed, what is true, what deserves attention, and how should it be told?
 
-This restriction applies to scholarly papers. Official software releases, database updates, datasets, infrastructure changes, security notices, and service changes remain eligible through appropriate primary official sources.
+A paper is not news merely because it is new or peer reviewed. A release is not news merely because a version number changed. The Newsroom Engine requires a meaningful story: workflow impact, consequence, tension, changed capability, important limitation, reusable resource value, correction/retraction significance, independent validation, or another defensible reason the reader should care now.
+
+## Scientific gates remain strict
+
+The scholarly-literature stream remains **peer-reviewed-only**.
+
+Preprints, submitted manuscripts, working papers, conference abstracts, and records with uncertain peer-review status are excluded before News Value scoring. Preprint services may be used only for identity resolution or locating a later peer-reviewed publication.
+
+Official software releases, databases, datasets, infrastructure/service/security events, corrections, and retractions use their appropriate official-source verification rules and are not incorrectly subjected to a paper peer-review requirement.
+
+## Newsroom design
+
+The newsroom layer was informed by qualitative review of editorial behaviors across technology/science/health outlets including Digiato, Zoomit, Peivast, Euronews Persian, Interesting Engineering, ScienceAlert, Science in Telegram, and Gadget News.
+
+Radar does **not** imitate any publication's distinctive style. It abstracts cross-publication newsroom behaviors:
+
+- result/consequence-first leads;
+- short paragraphs;
+- clear story angles;
+- concrete numbers only when they clarify scale;
+- enough context to understand the news without opening the source;
+- visible but concise limitations;
+- selection over exhaustive listing;
+- separate short-channel and longer-article treatment.
+
+Hype, unsupported causality, inflated AI capability, miracle/cure framing, and clickbait are explicitly rejected.
+
+## Default visible output
+
+A normal daily run is intentionally compact:
+
+- **خبر اول** — zero or one lead story;
+- **ارزش دنبال‌کردن** — usually 1-4 more stories;
+- **هشدار عملی** — only when a workflow event needs action;
+- **سیگنال امروز** — optional, never manufactured;
+- **انتخاب تحریریه** — best candidates for Telegram/article/visual treatment;
+- **برای Deep Dive** — concise open questions when useful;
+- **زیر نظر** — short Watchlist;
+- **پایش امروز** — observed-only run telemetry.
+
+Detailed peer-review tables, repository-health audits, reproducibility scores, benchmark audit tables, raw Evidence Cards/Story Cards, and long statistics are backend diagnostics and are shown only on request or when essential to a story.
+
+## News Value
+
+Evidence quality is a gate, not a news score.
+
+After eligibility, the newsroom scores six dimensions 0-5:
+
+1. impact;
+2. audience relevance;
+3. novelty;
+4. consequence;
+5. storyability;
+6. timeliness.
+
+There is no minimum story quota. A low-news day is valid.
+
+High overhype risk does not automatically make a story less newsworthy; it changes treatment depth and caveat requirements.
+
+## Stateful evidence backend
+
+Radar 3.0 retains the v2.7 backend improvements:
+
+- one Evidence Card per canonical eligible event;
+- optional cross-run state;
+- material-change detection;
+- duplicate suppression;
+- observed-only telemetry;
+- Curator feedback for useful unregistered official sources;
+- claim-level source provenance.
+
+Radar adds one Story Card per selected newsroom story. Evidence Card remains factual authority; Story Card owns angle, headline, lead, consequence, and format recommendation.
 
 ## Source Curator integration
 
-When the Bioinformatics Source Curator handoff is available, valid rows from `10_RADAR_SOURCES` are the primary persistent monitoring roster. The configured workbook is resolved by title (`Bioinformatics Source Curator Registry`) so no private spreadsheet ID is stored in this public repository.
+When available, valid rows from the `Bioinformatics Source Curator Registry` / `10_RADAR_SOURCES` handoff are the first persistent monitoring roster.
 
-Curator controls **where Radar monitors first**, not what Radar is allowed to claim. Source-level approval never proves that an individual paper is peer-reviewed or that a software/database change is important.
+Curator approval controls where Radar looks first. It never proves that a paper is peer reviewed, that a release matters, or that an event deserves newsroom coverage.
 
-Repeatedly useful official sources that are absent from the Curator roster can be recorded in an internal `Curator Feedback v1` queue for future review. Radar does not self-approve those sources.
-
-## Risk-aware editorial routing
-
-Technical priority and Social Score remain separate. Version 2.7.0 adds a small evidence-risk penalty for ordering Social Candidates:
-
-`editorial_priority_score = social_score - evidence_risk_penalty`
-
-This ranking adjustment does not alter the scientific score and does not hide the original Social Score. Evidence-risk modifiers such as `AUTHOR_REPORTED`, `CLINICAL_CAUTION`, `CAUSALITY_CAUTION`, and `HIGH_OVERHYPE_RISK` remain non-negotiable downstream boundaries.
-
-Signal of the Day now distinguishes:
-
-- `OBSERVATION`
-- `EMERGING_SIGNAL`
-- `ESTABLISHED_TREND`
-
-An emerging signal requires at least two independent eligible observations from different projects or event origins. An established trend is intentionally rare and normally requires evidence beyond one daily run.
+Built-in watchlists remain coverage-gap and resilience fallback.
 
 ## Telegram orchestration
 
-The Radar can generate Telegram Handoff v1 without directly invoking or discovering Telegram Editor. Handoff version remains `1.0` for compatibility, but candidates are now derived from final Evidence Cards so exact facts and evidence boundaries are not reconstructed independently.
+Radar can construct `Telegram Handoff v1` from final newsroom-selected Story Cards while preserving Evidence Card facts and limitations.
 
-The outer orchestrator owns downstream Editor execution and optional persistence of Radar run state.
+Radar itself never invokes or searches for Telegram Editor. The outer orchestrator may load canonical Telegram Editor instructions directly from GitHub and apply them to the in-context handoff.
+
+Handoff version remains `1.0` for downstream compatibility; Radar 3.0 adds optional newsroom fields such as News Value, selected angle, headline options, and format recommendation.
 
 ## Typical prompts
 
-- Run Bioinformatics Intelligence Radar for today.
-- Run the radar for the last 7 days.
-- Run today's radar using the current Source Curator registry.
-- Continue today's radar using the previous Radar state and show only material changes.
-- Show only Critical Alerts and Tool & Software Radar.
-- Find Social Candidates from today's peer-reviewed bioinformatics radar.
-- Deep-dive the top benchmark claim from today's radar.
-
-## Design principles
-
-- Curator-approved A/B sources are the primary persistent monitoring roster when available.
-- Source-level approval never replaces Radar item-level verification.
-- Built-in watchlists cover gaps and failures while the curated registry grows.
-- Primary and claim-level sources first.
-- Exact reporting windows and separate event/publication/effective dates.
-- Scholarly literature must have positively verified peer-review status before scoring.
-- Preprint-only and uncertain-review-status papers are excluded from all user-visible Radar output.
-- One Evidence Card is the factual source of truth for each canonical eligible story.
-- Cross-run state is optional, explicit, and never invented.
-- Material-change detection prevents repeated daily coverage without hiding real updates.
-- Adaptive discovery uses verification tiers and stop rules.
-- No minimum story quota and no filler.
-- No invented scan counts; use observed telemetry only.
-- Infrastructure changes outrank routine papers when workflow impact is higher.
-- Social ranking is adjusted for evidence risk without changing scientific evidence scores.
-- Evidence-risk modifiers survive summarization and downstream handoff.
-- Radar reports are written in Persian by default while technical names and identifiers remain in English when needed for precision.
+- Run today's Bioinformatics Intelligence Radar.
+- Run the Radar for the last 7 days.
+- Show only the stories that are genuinely worth following today.
+- Run the Radar and prepare the best Telegram candidates.
+- What is the strongest bioinformatics story today and why?
+- Show technical appendix for the top story.
+- Deep-dive the most important benchmark claim.
 
 ## Runtime layout
 
-- `SKILL.md`: lean control plane, routing, workflow, invariants, and release gate.
-- `agents/openai.yaml`: UI metadata and default prompt.
-- `references/curator-handoff.md`: Source Curator schema, registry locator, feedback boundary, and fallback behavior.
-- `references/source-policy.md`: source hierarchy and claim-level verification policy.
-- `references/peer-review-policy.md`: mandatory scholarly-literature eligibility gate.
-- `references/search-playbook.md`: adaptive staged discovery, verification tiers, stop rules, and deduplication.
-- `references/watchlists.md`: fallback and coverage-gap sources.
-- `references/evidence-card.md`: internal single-source-of-truth contract for canonical stories.
-- `references/run-state.md`: optional cross-run ledger, material-change logic, telemetry, and Curator feedback queue.
-- `references/scoring.md`: technical, social, evidence-risk-adjusted editorial, and reproducibility scoring.
-- `references/editorial-tone-engine.md`: adaptive tone selection and evidence modifiers.
-- `references/output-contract.md`: authoritative Persian report schema, no-quota behavior, Signal evidence graph, and observed statistics.
-- `references/telegram-handoff.md`: Telegram Handoff v1 derived from final Evidence Cards.
-- `references/orchestration.md`: Curator transfer, optional state persistence, downstream Editor execution, and failure behavior.
+- `SKILL.md` — lean control plane and release gates.
+- `agents/openai.yaml` — UI metadata/default prompt.
+- `references/curator-handoff.md` — upstream source-roster contract.
+- `references/source-policy.md` — source hierarchy and claim-level verification.
+- `references/peer-review-policy.md` — scholarly eligibility gate.
+- `references/search-playbook.md` — adaptive discovery, Story Gate triage, verification tiers, deduplication.
+- `references/watchlists.md` — coverage-gap/fallback monitoring.
+- `references/run-state.md` — optional state, material-change detection, telemetry, Curator feedback.
+- `references/evidence-card.md` — internal factual authority.
+- `references/newsroom-engine.md` — News Value, Story Gate, angle/headline/lead logic, Story Card, channel/article treatment.
+- `references/scoring.md` — News Value, operational urgency, Telegram compatibility score, confidence, Signal classes.
+- `references/editorial-tone-engine.md` — newsroom tones and evidence modifiers.
+- `references/output-contract.md` — visible Persian Newsroom Radar contract.
+- `references/telegram-handoff.md` — downstream Telegram Handoff v1.
+- `references/orchestration.md` — Curator/state/newsroom/Editor ownership and transfer.
+
+## Design principles
+
+- primary sources first;
+- exact dates and reporting windows;
+- peer-reviewed-only scholarly coverage;
+- one evidence source of truth per story;
+- one newsroom Story Card per selected story;
+- no filler quota;
+- no artificial trend/signal;
+- lead with the news, not the method;
+- audience consequence matters;
+- caveats remain visible;
+- backend rigor should improve the story, not overwhelm it;
+- Persian by default, technical English retained when precision requires it.
