@@ -1,0 +1,38 @@
+[
+  {
+    "content_type": "paper",
+    "title": "Peer-reviewed workflow result",
+    "identifiers": {"doi": "10.1000/example.1"},
+    "primary_source": "https://doi.org/10.1000/example.1",
+    "peer_review_status": "verified",
+    "peer_review_source": "https://example.org/journal-record",
+    "publication_status": "peer_reviewed",
+    "event_date": "2026-09-20",
+    "impact": 5, "audience_relevance": 4, "novelty": 4, "consequence": 5, "storyability": 4, "timeliness": 5,
+    "workflow_impact": "changes variant prioritization",
+    "evidence_boundary": "authors report benchmark results"
+  },
+  {
+    "content_type": "paper",
+    "title": "Preprint excluded",
+    "identifiers": {"doi": "10.1000/example.2"},
+    "primary_source": "https://doi.org/10.1000/example.2",
+    "peer_review_status": "unknown",
+    "is_preprint_only": true
+  },
+  {
+    "content_type": "software",
+    "title": "Stable release",
+    "identifiers": {"repository": "org/tool", "canonical_url": "https://github.com/org/tool/releases/tag/v2.0.0"},
+    "primary_source": "https://github.com/org/tool/releases/tag/v2.0.0",
+    "release_tag": "v2.0.0", "release_channel": "stable", "version": "2.0.0",
+    "impact": 4, "audience_relevance": 5, "novelty": 3, "consequence": 4, "storyability": 4, "timeliness": 5
+  },
+  {
+    "content_type": "software",
+    "title": "Stable release duplicate",
+    "identifiers": {"repository": "org/tool", "canonical_url": "https://github.com/org/tool/releases/tag/v2.0.0"},
+    "primary_source": "https://github.com/org/tool/releases/tag/v2.0.0",
+    "release_tag": "v2.0.0", "release_channel": "stable", "version": "2.0.0"
+  }
+]

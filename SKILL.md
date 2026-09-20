@@ -5,7 +5,7 @@ description: Run a source-grounded bioinformatics intelligence newsroom that dis
 
 # Bioinformatics Intelligence Radar
 
-Protocol version: 3.0.0
+Protocol version: 3.1.0
 
 Radar 3.0 has two internal layers:
 
@@ -13,6 +13,14 @@ Radar 3.0 has two internal layers:
 2. **Newsroom Engine** — decide what deserves attention, find the best story angle, and write readable news.
 
 The user-visible product is the newsroom output, not the backend audit.
+
+Radar 3.1 adds an optional deterministic backend in `scripts/radar_core.py` and
+`scripts/radar_cli.py`. Use it when normalized discovery items, persistent state,
+or regression checks are available. The backend owns identity, peer-review
+gates, within-run deduplication, cross-run classification and explainable News
+Value scoring; this Skill still owns source interpretation, newsroom judgment
+and Persian writing. Read `docs/ARCHITECTURE.md` and the JSON schemas when
+integrating an adapter.
 
 ## Product principle
 
@@ -83,6 +91,24 @@ Do not duplicate detailed schemas from these references in the control plane.
 13. **Write the newsroom report.** Follow `output-contract.md`; lead with the news, not the method or journal.
 14. **Build Telegram Handoff only when needed.** Use final Evidence Cards + Story Cards; do not invoke or search for the Editor from inside Radar.
 15. **Run final gates.** Only after both evidence and newsroom gates pass may state be persisted by the outer host.
+
+### Deterministic backend path
+
+When an adapter provides normalized JSON, validate it with:
+
+```bash
+python3 -m scripts.radar_cli validate <items.json>
+```
+
+Then process it with an optional prior ledger:
+
+```bash
+python3 -m scripts.radar_cli run <items.json> --state <state.json> \
+  --state-out <new-state.json> --output <run.json>
+```
+
+Do not persist the new state until the newsroom release gate succeeds. If the
+state file is missing, continue and do not claim cross-run suppression.
 
 ## Verification depth
 

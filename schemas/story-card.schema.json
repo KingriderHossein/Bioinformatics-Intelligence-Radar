@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/KingriderHossein/Bioinformatics-Intelligence-Radar/schemas/story-card.schema.json",
+  "title": "Radar Story Card",
+  "type": "object",
+  "required": ["canonical_id", "evidence_card_id", "news_value", "selected_angle_type"],
+  "properties": {
+    "canonical_id": {"type": "string"},
+    "evidence_card_id": {"type": "string"},
+    "selected_angle_type": {"enum": ["workflow_impact", "capability", "limitation", "validation", "resource", "correction", "security", "migration", "scientific_intelligence"]},
+    "headline": {"type": "string"},
+    "lead_fa": {"type": "string"},
+    "consequence_fa": {"type": "string"},
+    "format_recommendation": {"enum": ["Telegram", "Article", "Infographic", "Technical explainer", "Alert"]},
+    "news_value": {"type": "object", "required": ["score", "dimensions"]},
+    "confidence": {"enum": ["LOW", "MEDIUM", "HIGH"]},
+    "limitation_fa": {"type": "string"}
+  },
+  "additionalProperties": true
+}

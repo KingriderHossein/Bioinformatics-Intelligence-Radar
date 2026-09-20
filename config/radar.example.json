@@ -1,0 +1,22 @@
+{
+  "protocol_version": "3.1.0",
+  "reporting_window_hours": 36,
+  "language": "fa",
+  "state_path": "state/radar-state.json",
+  "input_path": "data/discovered-items.json",
+  "output_path": "output/radar-run.json",
+  "source_policy": {
+    "primary_sources_first": true,
+    "exclude_unverified_peer_review": true,
+    "allow_preprint_for_identity_only": true
+  },
+  "newsroom": {
+    "max_follow_stories": 4,
+    "max_editorial_candidates": 5,
+    "allow_empty_lead": true
+  },
+  "delivery": {
+    "formats": ["markdown", "telegram_handoff_json"],
+    "telegram_enabled": false
+  }
+}

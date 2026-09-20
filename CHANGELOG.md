@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.1.0 - 2026-09-21
+
+- Added Evidence Card, Story Card and run-state JSON Schemas.
+- Added durable identity, material event fingerprints and within-run deduplication.
+- Added cross-run state classification for unchanged, updated, publication, release and correction transitions.
+- Added explainable six-dimension News Value scoring.
+- Added `scripts/radar_cli.py` for validation and processing normalized discovery items.
+- Added golden fixtures, unit tests, CI checks and example configuration.
+- Added architecture, configuration, contribution and migration documentation.
+- Preserved Radar 3.0 newsroom, peer-review and Telegram Handoff contracts.
+
 ## 3.0.0 - 2026-09-13
 
 - Reframed Bioinformatics Intelligence Radar as a two-layer product: `Intelligence Engine` for evidence and `Newsroom Engine` for story selection/presentation.

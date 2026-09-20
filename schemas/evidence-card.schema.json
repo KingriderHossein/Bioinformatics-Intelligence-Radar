@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/KingriderHossein/Bioinformatics-Intelligence-Radar/schemas/evidence-card.schema.json",
+  "title": "Radar Evidence Card",
+  "type": "object",
+  "required": ["canonical_id", "content_type", "primary_source", "event_fingerprint"],
+  "properties": {
+    "canonical_id": {"type": "string", "minLength": 3},
+    "content_type": {"enum": ["paper", "article", "software", "release", "database", "dataset", "infrastructure", "security", "correction", "retraction"]},
+    "title": {"type": "string"},
+    "primary_source": {"type": "string", "format": "uri"},
+    "event_date": {"type": "string"},
+    "publication_status": {"type": "string"},
+    "peer_review_status": {"enum": ["verified", "excluded", "unknown"]},
+    "peer_review_source": {"type": "string", "format": "uri"},
+    "claims": {"type": "array", "items": {"type": "object"}},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "do_not_say_fa": {"type": "array", "items": {"type": "string"}},
+    "event_fingerprint": {"type": "string", "pattern": "^[a-f0-9]{20}$"}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/KingriderHossein/Bioinformatics-Intelligence-Radar/schemas/run-state.schema.json",
+  "title": "Radar Run State",
+  "type": "object",
+  "required": ["protocol_version", "ledger", "telemetry"],
+  "properties": {
+    "protocol_version": {"type": "string"},
+    "updated_at": {"type": "string"},
+    "ledger": {"type": "object", "additionalProperties": {"type": "object", "required": ["story_key", "canonical_id", "status", "last_event_fingerprint"]}},
+    "telemetry": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "curator_feedback": {"type": "array", "items": {"type": "object"}}
+  },
+  "additionalProperties": true
+}
